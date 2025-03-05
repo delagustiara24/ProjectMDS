@@ -148,43 +148,21 @@ data_product <- data_product %>%
 
 # Perubahan data_transaction
 data_transaction <- data_transaction %>%
+  mutate(Transaction_Date = as.Date(Transaction_Date, format = "%d.%m.%y")) %>%
   left_join(data_voucher, by = "VoucherID") %>%
-  mutate(
-    Discount = ifelse(Voucher_status == "Used", Discount, 0)  # Jika "Used", ambil diskon, jika tidak, 0
-  )
-
-# Konversi Total_Price ke IDR tanpa format string
-data_transaction <- data_transaction %>%
-  mutate(
-    Total_Price = as.numeric(Total_Price) * exchange_rate  # Pastikan tetap numerik
-  )
-
-# Gabungkan data_transaction dengan data_product berdasarkan ProductID
-data_transaction <- data_transaction %>%
+  mutate(Discount = ifelse(Voucher_status == "Used", Discount, 0)) %>%
+  mutate(Total_Price = as.numeric(Total_Price) * exchange_rate) %>%
   left_join(data_product %>% select(ProductID, Price), by = "ProductID") %>%
   mutate(
-    Discount = Discount / 100,  # Ubah Discount dari persentase ke desimal
-    Discount_Price = Price * Discount  # Hitung harga diskon
-  )
-
-# Memastikan Price dan Total_Price tetap numerik untuk MySQL
-data_transaction <- data_transaction %>%
-  mutate(
-    Price = as.numeric(Price),  # Pastikan tetap numerik
-    Total_Price = as.numeric(Total_Price)  # Pastikan tetap numerik
-  )
-
-# Menyusun ulang kolom sesuai urutan yang diinginkan
-data_transaction <- data_transaction %>%
+    Discount = Discount / 100,
+    Discount_Price = Price * Discount,
+    Price = as.numeric(Price),
+    Total_Price = as.numeric(Total_Price)
+  ) %>%
   select(TransactionID, Transaction_Date, Price, Total_Price, Discount_Price, 
          Quantity, CustomerID, ProductID, PMID, VoucherID, 
-         Voucher_status, Discount)
-
-# Format Discount sebagai persentase hanya untuk tampilan, bukan penyimpanan
-data_transaction <- data_transaction %>%
-  mutate(
-    Discount = ifelse(Discount == 0, "", paste0(Discount * 100, "%"))  # Hanya tambahkan "%" jika tidak 0
-  )
+         Voucher_status, Discount) %>%
+  mutate(Discount = ifelse(Discount == 0, "", paste0(Discount * 100, "%")))
 
 # Membuat dataset baru 'data_payment_method'
 data_payment_method <- data_transaction %>%
