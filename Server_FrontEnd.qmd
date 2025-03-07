@@ -1,0 +1,112 @@
+---
+title: "MDS"
+author: "Dela Gustiara"
+format: html
+editor: visual
+---
+
+```{r}
+#==========================UI(FRONT-END)===============================#
+
+library(shiny)
+library(shinydashboard)
+library(plotly)
+
+ui <- dashboardPage(
+  dashboardHeader(title = "Dashboard Online Shop"),
+  dashboardSidebar(
+    sidebarMenu(
+      menuItem("Pelanggan", tabName = "customer", icon = icon("users")),
+      menuItem("Produk", tabName = "product", icon = icon("box")),
+      menuItem("Transaksi", tabName = "transaction", icon = icon("shopping-cart")),
+      menuItem("Voucher", tabName = "voucher", icon = icon("tags"))
+    )
+  ),
+  dashboardBody(
+    tabItems(
+      # Tab Pelanggan
+      tabItem(tabName = "customer",
+        fluidRow(
+          box(title = "Filter Pelanggan", width = 4, solidHeader = TRUE, status = "primary",
+            uiOutput("filter_customer_id"),
+            uiOutput("filter_customer_gender"),
+            uiOutput("filter_customer_age")
+          ),
+          box(title = "Data Pelanggan", width = 8, solidHeader = TRUE, status = "info",
+            dataTableOutput("out_tbl_customer")
+          )
+        ),
+        fluidRow(
+          box(title = "Distribusi Usia Berdasarkan Gender", width = 12, status = "success", solidHeader = TRUE,
+            plotlyOutput("bar_chart_customer")
+          )
+        )
+      ),
+      
+      # Tab Produk
+      tabItem(tabName = "product",
+        fluidRow(
+          box(title = "Filter Produk", width = 4, solidHeader = TRUE, status = "primary",
+            uiOutput("filter_product_id"),
+            uiOutput("filter_product_name"),
+            uiOutput("filter_product_category"),
+            uiOutput("filter_product_stock"),
+            uiOutput("filter_product_price")
+          ),
+          box(title = "Data Produk", width = 8, solidHeader = TRUE, status = "info",
+            dataTableOutput("out_tbl_product")
+          )
+        ),
+        fluidRow(
+          box(title = "Jumlah Stok Berdasarkan Kategori Produk", width = 12, status = "success", solidHeader = TRUE,
+            plotlyOutput("bar_chart_product")
+          )
+        )
+      ),
+      
+      # Tab Transaksi
+      tabItem(tabName = "transaction",
+        fluidRow(
+          box(title = "Filter Transaksi", width = 4, solidHeader = TRUE, status = "primary",
+            uiOutput("filter_transaction_id"),
+            uiOutput("filter_transaction_date"),
+            uiOutput("filter_transaction_price")
+          ),
+          box(title = "Data Transaksi", width = 8, solidHeader = TRUE, status = "info",
+            dataTableOutput("out_tbl_transaction")
+          )
+        ),
+        fluidRow(
+          box(title = "Total Harga Transaksi per Hari", width = 12, status = "success", solidHeader = TRUE,
+            plotlyOutput("bar_chart_transaction")
+          )
+        )
+      ),
+      
+      # Tab Voucher
+      tabItem(tabName = "voucher",
+        fluidRow(
+          box(title = "Filter Voucher", width = 4, solidHeader = TRUE, status = "primary",
+            uiOutput("filter_voucher_id"),
+            uiOutput("filter_voucher_name"),
+            uiOutput("filter_voucher_discount")
+          ),
+          box(title = "Distribusi Diskon Berdasarkan Nama Voucher", width = 8, solidHeader = TRUE, status = "info",
+            plotlyOutput("bar_chart_voucher")
+          )
+        )
+      )
+    )
+  )
+)
+
+```
+
+```{r}
+# Run App
+shinyApp(ui, server)
+```
+
+```{r}
+
+```
