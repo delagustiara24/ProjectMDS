@@ -137,17 +137,133 @@ Dengan menggunakan **R**, **PostgreSQL**, dan **Shiny**, proyek ini menciptakan 
 
 Struktur tabel yang digunakan dalam database Dekirume.
 
-**Contoh pembuatan tabel `data_product`**:
+### :abacus: Create Database
+The Sigmaria Market Online Shop database stores information that represents interconnected data attributes for the analysis.
 
 ```sql
-CREATE TABLE IF NOT EXISTS data_product (
-      ProductID VARCHAR(20) PRIMARY KEY,
-      Product_name VARCHAR(100),
-      Product_Description TEXT,
-      Product_Category VARCHAR(50),
-      Stock INT,
-      Price DECIMAL(10,2)
-    );
+CREATE DATABASE Online_Shop
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+```
+### :womans_clothes: Create Table Product
+The product table provides information to users about products of the sigmaria market. Users can find out the product ID, product name, product description, product category, stock amount, and price of each product. Here is a description for each author's table.
+
+| Attribute                  | Type                  | Description                     		       |
+|:---------------------------|:----------------------|:------------------------------------------------|
+| productid                  | character varying(20) | Id Produk                       		       |
+| product_name               | text		     | Nama Produk                   		       |
+| product_description        | text		     | Deskripsi Produk                      	       |	
+| product_category           | text		     | Kategori Produk                 		       |
+| stock	                     | integer		     | Jumlah Stok dari Setiap Produk	               |
+| price		    	     | numeric               | Harga dari Masing-Masing Produk                 |
+
+with the SQL script :
+
+```sql
+CREATE TABLE IF NOT EXISTS public.Product (
+    ProductID character varying(20) NOT NULL,
+    Product_name text NOT NULL,
+    Product_Description text NOT NULL,
+	Product_Category text NOT NULL,
+	Stock integer NOT NULL,
+	Price numeric NOT NULL,
+    PRIMARY KEY (ProductID)
+);
+```
+### :computer: Create Table Transaction
+The transaction table presents information of transactions. Users can find out transaction ID, transaction date, total price of each transaction, quantity, customer ID, product ID, pay method ID, voucher ID, voucher status. The following is a description for each transaction table.
+
+| Attribute                  | Type                  | Description                     		       |
+|:---------------------------|:----------------------|:------------------------------------------------|
+| transactionid              | character varying(20) | Id Transaksi                       	       |
+| transaction_date           | date		     | Tanggal Transaksi                  	       |
+| total_price                | numeric		     | Total Harga dari Tiap Transaksi                 |	
+| quantity                   | integer		     | Jumlah Produk	                	       |
+| customerid                 | character varying(11) | Id Customer                                     |
+| productid    	    	     | character varying(20) | Id Produk	                               |
+| pmid	                     | character varying(11) | Id Pay Method     			       |
+| voucherid		     | character varying(11) | Id Voucher				       |
+| voucher_status             | text		     | Status Voucher                   	       |
+
+with the SQL script :
+
+```sql
+CREATE TABLE IF NOT EXISTS public.Transaction (
+    TransactionID character varying(20) NOT NULL,
+    Transaction_Date date NOT NULL,
+    Total_price numeric NOT NULL,
+	Quantity integer NOT NULL,
+	CustomerID character varying(11) NOT NULL,
+	ProductID character varying(20) NOT NULL,
+	PMID character varying(11) NOT NULL,
+	VoucherID character varying(11) NOT NULL,
+	Voucher_status text NOT NULL,
+	PRIMARY KEY (TransactionID),
+	FOREIGN KEY (CustomerID) REFERENCES Customer (CustomerID),
+	FOREIGN KEY (ProductID) REFERENCES Product (ProductID),
+	FOREIGN KEY (PMID) REFERENCES Pay_method (PMID),
+	FOREIGN KEY (VoucherID) REFERENCES Voucher (VoucherID)
+);
+```
+### :ticket: Create Table Voucher
+The voucher table presents information about a voucher. Besides being able to know the number of products, users will also get information about available vouchers. Users will get the voucher information about the name of the voucher and the amount of the discount on the voucher. Below is a description of the voucher table.
+
+| Attribute                  | Type                  | Description                     		       |
+|:---------------------------|:----------------------|:------------------------------------------------|
+| voucherid                  | character varying(11) | Id Voucher                       	       |
+| voucher_name               | text		     | Nama Voucher                  		       |
+| discount                   | integer		     | Besaran Diskon dari Setiap Voucher              |	
+
+with the SQL script :
+
+```sql
+CREATE TABLE IF NOT EXISTS public.Voucher (
+    VoucherID character varying(11) NOT NULL,
+    Voucher_name text NOT NULL,
+	Discount integer NOT NULL,
+	PRIMARY KEY (VoucherID)
+);
+```
+### :credit_card: Create Table Pay_Method
+The pay_method table provides information to the users about payment methods which consist of 4 methods, there are card, PayPal, digital wallets and others from PMID and the method name of each ID. Here's a description for each pay_method table.
+
+| Attribute          | Type                  | Description                     |
+|:-------------------|:----------------------|:--------------------------------|
+| pmid               | character varying(11) | Id pay method                   |
+| method_name        | text		     | nama metode pembayaran	       |
+
+with the SQL script :
+
+```sql
+CREATE TABLE IF NOT EXISTS public.Pay_method (
+    PMID character varying(11) NOT NULL,
+    Method_name text NOT NULL,
+	PRIMARY KEY (PMID)
+);
+```
+### :couple: Create Table Customer
+The customer table provides information to the user regarding customer data, so that the user can find out the customer ID, gender, location which includes 4 locations, there are California, New York, Chicago, New Jersey and age range 17 - 63 years. Here is a description for each customer table. 
+
+| Attribute          | Type                  | Description                     |
+|:-------------------|:----------------------|:--------------------------------|
+| customerid         | character varying(11) | Id Customer                     |
+| gender             | character varying(11) | Jenis Kelamin                   |
+| locations          | text		     | Lokasi                          |
+| age		     | integer	 	     | Umur	                       |
+
+with the SQL script : 
+
+```sql
+CREATE TABLE IF NOT EXISTS public.Customer (
+    CustomerID character varying(11) NOT NULL,
+    Gender character varying(11) NOT NULL,
+    Locations text NOT NULL,
+	Age integer NOT NULL,
+    PRIMARY KEY (CustomerID)
+);
 ```
 
 ---
