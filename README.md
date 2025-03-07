@@ -1,6 +1,6 @@
 # Dekirume Online Shop
 
-## *"Belanja Mudah, Pilihan Lengkap!"*
+## *\"Belanja Mudah, Pilihan Lengkap!\"*
 
 ---
 
@@ -10,7 +10,7 @@
   - [Apa itu Dekirume?](#apa-itu-dekirume)
   - [Fitur Utama](#fitur-utama)
   - [Keunggulan Dekirume](#keunggulan-dekirume)
-- [Cara Menggunakan](#cara-menggunakan)
+- [Cara Menggunakan](#cara-menggunakan-dekirume)
 - [Tentang Proyek](#tentang-proyek)
 - [Tangkapan Layar](#tangkapan-layar)
 - [Demo](#demo)
@@ -69,20 +69,40 @@ Dengan menggunakan **R**, **PostgreSQL**, dan **Shiny**, proyek ini menciptakan 
 
 ## 📸 Tangkapan Layar
 
-**Tampilan Beranda**  
-![Beranda](Image/Screenshot_Home.png)
+### - Home  
+```html
+<p align="center">
+  <img width="900" height="500" src="Image/Screenshot_Home.png">
+</p>
+```
 
-**Galeri Produk**  
-![Produk](Image/Screenshot_Gallery_Product.png)
+### - Product  
+```html
+<p align="center">
+  <img width="900" height="500" src="Image/Screenshot_Gallery_Product.png">
+</p>
+```
 
-**Detail Transaksi**  
-![Transaksi](Image/Screenshot_Transaction.png)
+### - Transactions  
+```html
+<p align="center">
+  <img width="900" height="500" src="Image/Screenshot_Transaction.png">
+</p>
+```
 
-**Voucher & Promo**  
-![Voucher](Image/Screenshot_Voucher.png)
+### - Voucher  
+```html
+<p align="center">
+  <img width="900" height="500" src="Image/Screenshot_Voucher.png">
+</p>
+```
 
-**Metode Pembayaran**  
-![Pembayaran](Image/Screenshot_Payment.png)
+### - Payment Methods  
+```html
+<p align="center">
+  <img width="900" height="500" src="Image/Screenshot_Payment.png">
+</p>
+```
 
 ---
 
@@ -147,7 +167,7 @@ CREATE TABLE Product (
 
 📁 **Struktur direktori proyek**:
 
-```
+```plaintext
 .
 ├── Image
 ├── app           # Aplikasi Shiny
