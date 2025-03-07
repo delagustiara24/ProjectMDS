@@ -14,7 +14,6 @@
 - [Tentang Proyek](#tentang-proyek)
 - [Tangkapan Layar](#tangkapan-layar)
 - [Demo](#demo)
-- [Persyaratan](#persyaratan)
 - [Skema Database](#skema-database)
 - [ERD](#erd)
 - [Deskripsi Data](#deskripsi-data)
@@ -101,14 +100,6 @@ Dengan menggunakan **R**, **PostgreSQL**, dan **Shiny**, proyek ini menciptakan 
 
 ---
 
-## ⚠️ Persyaratan
-
-- **Bahasa Pemrograman & Tools:** R (`rvest`, `tidyverse`, `rio`, `kableExtra`, `stringr`)
-- **Database:** PostgreSQL & ElephantSQL
-- **Framework Dashboard:** `shiny`, `shinythemes`, `bs4Dash`, `DT`, `dplyr`
-
----
-
 ## 🗂️ Skema Database
 
 📌 **Diagram Relasi Antar Entitas**  
@@ -135,9 +126,9 @@ Dengan menggunakan **R**, **PostgreSQL**, dan **Shiny**, proyek ini menciptakan 
 
 ## 📊 Deskripsi Data
 
-Struktur tabel yang digunakan dalam database Dekirume.
+Dalam sistem ini, kita menggunakan PostgreSQL sebagai database utama untuk menyimpan dan mengelola data e-commerce Dekirume. Struktur tabel yang digunakan dalam database Dekirume.
 
-### :abacus: Create Database
+### 1️⃣ Membuat Database
 The Sigmaria Market Online Shop database stores information that represents interconnected data attributes for the analysis.
 
 ```sql
@@ -148,122 +139,120 @@ CREATE DATABASE Online_Shop
     CONNECTION LIMIT = -1
     IS_TEMPLATE = False;
 ```
-### :womans_clothes: Create Table Product
-The product table provides information to users about products of the sigmaria market. Users can find out the product ID, product name, product description, product category, stock amount, and price of each product. Here is a description for each author's table.
+### Create Table Product
+Tabel produk berfungsi sebagai sumber informasi utama bagi pengguna untuk mengetahui detail berbagai produk yang tersedia di pasar Dekirume. Melalui tabel ini, pengguna dapat mengakses data penting, termasuk ID produk sebagai identitas unik, nama produk, deskripsi yang menjelaskan karakteristiknya, kategori produk untuk klasifikasi yang lebih terstruktur, jumlah stok yang mencerminkan ketersediaan barang, serta harga yang menjadi acuan dalam transaksi.
 
 | Attribute                  | Type                  | Description                     		       |
 |:---------------------------|:----------------------|:------------------------------------------------|
-| productid                  | character varying(20) | Id Produk                       		       |
-| product_name               | text		     | Nama Produk                   		       |
+| productid                  | varchar               | Id Produk                       		       |
+| product_name               | varchar		     | Nama Produk                   		       |
 | product_description        | text		     | Deskripsi Produk                      	       |	
-| product_category           | text		     | Kategori Produk                 		       |
+| product_category           | varchar		     | Kategori Produk                 		       |
 | stock	                     | integer		     | Jumlah Stok dari Setiap Produk	               |
-| price		    	     | numeric               | Harga dari Masing-Masing Produk                 |
+| price		    	     | decimal(10,2)         | Harga dari Masing-Masing Produk                 |
 
 with the SQL script :
 
 ```sql
-CREATE TABLE IF NOT EXISTS public.Product (
-    ProductID character varying(20) NOT NULL,
-    Product_name text NOT NULL,
-    Product_Description text NOT NULL,
-	Product_Category text NOT NULL,
-	Stock integer NOT NULL,
-	Price numeric NOT NULL,
-    PRIMARY KEY (ProductID)
-);
+CREATE TABLE IF NOT EXISTS data_product (
+      ProductID VARCHAR(20) PRIMARY KEY,
+      Product_name VARCHAR(100),
+      Product_Description TEXT,
+      Product_Category VARCHAR(50),
+      Stock INT,
+      Price DECIMAL(10,2)
+    );
 ```
-### :computer: Create Table Transaction
-The transaction table presents information of transactions. Users can find out transaction ID, transaction date, total price of each transaction, quantity, customer ID, product ID, pay method ID, voucher ID, voucher status. The following is a description for each transaction table.
+### Create Table Transaction
+Tabel transaksi berfungsi sebagai wadah penyimpanan data yang mencatat seluruh aktivitas transaksi yang terjadi. Melalui tabel ini, pengguna dapat mengakses berbagai informasi penting terkait transaksi, termasuk ID transaksi sebagai identitas unik, tanggal transaksi untuk pencatatan waktu, serta total harga yang mencerminkan nilai keseluruhan dari setiap transaksi. Selain itu, tabel ini juga mencakup jumlah produk yang dibeli, ID pelanggan untuk mengidentifikasi pembeli, ID produk yang menunjukkan barang yang dibeli, ID metode pembayaran untuk mencatat cara pembayaran yang digunakan, serta ID voucher beserta status penggunaannya.
 
 | Attribute                  | Type                  | Description                     		       |
 |:---------------------------|:----------------------|:------------------------------------------------|
-| transactionid              | character varying(20) | Id Transaksi                       	       |
+| transactionid              | integer               | Id Transaksi                       	       |
 | transaction_date           | date		     | Tanggal Transaksi                  	       |
-| total_price                | numeric		     | Total Harga dari Tiap Transaksi                 |	
+| total_price                | decimal		     | Total Harga dari Tiap Transaksi                 |	
 | quantity                   | integer		     | Jumlah Produk	                	       |
-| customerid                 | character varying(11) | Id Customer                                     |
-| productid    	    	     | character varying(20) | Id Produk	                               |
-| pmid	                     | character varying(11) | Id Pay Method     			       |
-| voucherid		     | character varying(11) | Id Voucher				       |
-| voucher_status             | text		     | Status Voucher                   	       |
+| customerid                 | integer               | Id Customer                                     |
+| productid    	    	     | varchar               | Id Produk	                               |
+| pmid	                     | varchar               | Id Pay Method     			       |
+| voucherid		     | varchar               | Id Voucher				       |
+| voucher_status             | varchar		     | Status Voucher                   	       |
 
 with the SQL script :
 
 ```sql
-CREATE TABLE IF NOT EXISTS public.Transaction (
-    TransactionID character varying(20) NOT NULL,
-    Transaction_Date date NOT NULL,
-    Total_price numeric NOT NULL,
-	Quantity integer NOT NULL,
-	CustomerID character varying(11) NOT NULL,
-	ProductID character varying(20) NOT NULL,
-	PMID character varying(11) NOT NULL,
-	VoucherID character varying(11) NOT NULL,
-	Voucher_status text NOT NULL,
-	PRIMARY KEY (TransactionID),
-	FOREIGN KEY (CustomerID) REFERENCES Customer (CustomerID),
-	FOREIGN KEY (ProductID) REFERENCES Product (ProductID),
-	FOREIGN KEY (PMID) REFERENCES Pay_method (PMID),
-	FOREIGN KEY (VoucherID) REFERENCES Voucher (VoucherID)
-);
+CREATE TABLE IF NOT EXISTS data_transaction (
+      TransactionID INT PRIMARY KEY,
+      Transaction_Date DATE,
+      Price DECIMAL(10,2),
+      Total_Price DECIMAL(10,2),
+      Discount_Price DECIMAL(10,2),
+      Quantity INT,
+      CustomerID INT,
+      ProductID VARCHAR(20),
+      PMID VARCHAR(10),
+      VoucherID VARCHAR(10) NULL,
+      Voucher_status VARCHAR(20),
+      Discount DECIMAL(5,2),
+      FOREIGN KEY (CustomerID) REFERENCES data_customer(CustomerID) ON DELETE CASCADE ON UPDATE CASCADE,
+      FOREIGN KEY (ProductID) REFERENCES data_product(ProductID) ON DELETE CASCADE ON UPDATE CASCADE,
+      FOREIGN KEY (VoucherID) REFERENCES data_voucher(VoucherID) ON DELETE CASCADE ON UPDATE CASCADE,
+      FOREIGN KEY (PMID) REFERENCES data_payment_method(PMID) ON DELETE CASCADE ON UPDATE CASCADE
+    );
 ```
-### :ticket: Create Table Voucher
-The voucher table presents information about a voucher. Besides being able to know the number of products, users will also get information about available vouchers. Users will get the voucher information about the name of the voucher and the amount of the discount on the voucher. Below is a description of the voucher table.
+### Create Table Voucher
+Tabel voucher menyajikan informasi mendetail mengenai voucher yang tersedia. Selain mengetahui jumlah produk yang memenuhi syarat untuk penggunaan voucher, pengguna juga dapat mengakses berbagai data penting terkait voucher yang dapat digunakan. Informasi yang disediakan mencakup nama voucher sebagai identitasnya serta nilai diskon yang diberikan melalui voucher tersebut.
 
 | Attribute                  | Type                  | Description                     		       |
 |:---------------------------|:----------------------|:------------------------------------------------|
-| voucherid                  | character varying(11) | Id Voucher                       	       |
-| voucher_name               | text		     | Nama Voucher                  		       |
-| discount                   | integer		     | Besaran Diskon dari Setiap Voucher              |	
+| voucherid                  | varchar               | Id Voucher                       	       |
+| voucher_name               | varchar		     | Nama Voucher                  		       |
+| discount                   | decimal(5,2)	     | Besaran Diskon dari Setiap Voucher              |	
 
 with the SQL script :
 
 ```sql
-CREATE TABLE IF NOT EXISTS public.Voucher (
-    VoucherID character varying(11) NOT NULL,
-    Voucher_name text NOT NULL,
-	Discount integer NOT NULL,
-	PRIMARY KEY (VoucherID)
-);
+CREATE TABLE IF NOT EXISTS data_voucher (
+      VoucherID VARCHAR(10) PRIMARY KEY,
+      Voucher_name VARCHAR(100),
+      Discount DECIMAL(5,2)
+    );
 ```
-### :credit_card: Create Table Pay_Method
-The pay_method table provides information to the users about payment methods which consist of 4 methods, there are card, PayPal, digital wallets and others from PMID and the method name of each ID. Here's a description for each pay_method table.
+### Create Table Payment Method
+Tabel payment method menyajikan informasi mengenai metode pembayaran yang tersedia bagi pengguna. Tabel ini mencakup empat jenis metode pembayaran utama, yaitu kartu, PayPal, dompet digital, serta metode lainnya. Setiap metode pembayaran diidentifikasi dengan PMID (Payment Method ID) sebagai kode unik, serta nama metode pembayaran yang sesuai dengan setiap ID.
 
 | Attribute          | Type                  | Description                     |
 |:-------------------|:----------------------|:--------------------------------|
-| pmid               | character varying(11) | Id pay method                   |
-| method_name        | text		     | nama metode pembayaran	       |
+| pmid               | varchar               | Id pay method                   |
+| method_name        | varchar		     | nama metode pembayaran	       |
 
 with the SQL script :
 
 ```sql
-CREATE TABLE IF NOT EXISTS public.Pay_method (
-    PMID character varying(11) NOT NULL,
-    Method_name text NOT NULL,
-	PRIMARY KEY (PMID)
-);
+CREATE TABLE IF NOT EXISTS data_payment_method (
+      PMID VARCHAR(10) PRIMARY KEY,
+      Method_name VARCHAR(50)
+    );
 ```
-### :couple: Create Table Customer
-The customer table provides information to the user regarding customer data, so that the user can find out the customer ID, gender, location which includes 4 locations, there are California, New York, Chicago, New Jersey and age range 17 - 63 years. Here is a description for each customer table. 
+### Create Table Customer
+Tabel customer berisi informasi penting mengenai data pelanggan, memungkinkan pengguna untuk mengakses berbagai detail terkait identitas pelanggan. Informasi yang tercakup dalam tabel ini meliputi Customer ID sebagai identitas unik setiap pelanggan, jenis kelamin, serta lokasi pelanggan yang mencakup empat wilayah utama, yaitu California, New York, Chicago, dan New Jersey. Selain itu, tabel ini juga mencatat rentang usia pelanggan, yang berada dalam kisaran 17 hingga 63 tahun.
 
 | Attribute          | Type                  | Description                     |
 |:-------------------|:----------------------|:--------------------------------|
-| customerid         | character varying(11) | Id Customer                     |
-| gender             | character varying(11) | Jenis Kelamin                   |
-| locations          | text		     | Lokasi                          |
+| customerid         | integer               | Id Customer                     |
+| gender             | varchar               | Jenis Kelamin                   |
+| locations          | varchar		     | Lokasi                          |
 | age		     | integer	 	     | Umur	                       |
 
 with the SQL script : 
 
 ```sql
-CREATE TABLE IF NOT EXISTS public.Customer (
-    CustomerID character varying(11) NOT NULL,
-    Gender character varying(11) NOT NULL,
-    Locations text NOT NULL,
-	Age integer NOT NULL,
-    PRIMARY KEY (CustomerID)
-);
+CREATE TABLE IF NOT EXISTS data_customer (
+      CustomerID INT PRIMARY KEY,
+      Gender VARCHAR(10),
+      Locations VARCHAR(50),
+      Age INT
+    );
 ```
 
 ---
