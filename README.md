@@ -97,7 +97,7 @@ Dengan menggunakan **R**, **PostgreSQL**, dan **Shiny**, proyek ini menciptakan 
 
 ## 🎥 Demo
 
-🔗 **Lihat demo proyek kami di:** [Dekirume Dashboard](https://yudheeet1991.shinyapps.io/mdskel4app/#)
+🔗 **Lihat demo proyek kami di:** [Dekirume Dashboard]([https://yudheeet1991.shinyapps.io/mdskel4app/#](https://github.com/delagustiara24/ProjectMDS?tab=readme-ov-file#tentang-dekirume))
 
 ---
 
