@@ -1,6 +1,6 @@
 # Dekirume Online Shop
 
-## *\"Belanja Mudah, Pilihan Lengkap!\"*
+## *"Belanja Mudah, Pilihan Lengkap!"*
 
 ---
 
@@ -10,7 +10,7 @@
   - [Apa itu Dekirume?](#apa-itu-dekirume)
   - [Fitur Utama](#fitur-utama)
   - [Keunggulan Dekirume](#keunggulan-dekirume)
-- [Cara Menggunakan](#cara-menggunakan-dekirume)
+- [Cara Menggunakan](#cara-menggunakan)
 - [Tentang Proyek](#tentang-proyek)
 - [Tangkapan Layar](#tangkapan-layar)
 - [Demo](#demo)
@@ -70,40 +70,29 @@ Dengan menggunakan **R**, **PostgreSQL**, dan **Shiny**, proyek ini menciptakan 
 ## 📸 Tangkapan Layar
 
 ### - Home  
-```html
 <p align="center">
   <img width="900" height="500" src="Image/Screenshot_Home.png">
 </p>
-```
 
 ### - Product  
-```html
 <p align="center">
   <img width="900" height="500" src="Image/Screenshot_Gallery_Product.png">
 </p>
-```
 
 ### - Transactions  
-```html
 <p align="center">
   <img width="900" height="500" src="Image/Screenshot_Transaction.png">
 </p>
-```
 
 ### - Voucher  
-```html
 <p align="center">
   <img width="900" height="500" src="Image/Screenshot_Voucher.png">
 </p>
-```
 
 ### - Payment Methods  
-```html
 <p align="center">
   <img width="900" height="500" src="Image/Screenshot_Payment.png">
 </p>
-```
-
 ---
 
 ## 🎥 Demo
@@ -167,7 +156,7 @@ CREATE TABLE Product (
 
 📁 **Struktur direktori proyek**:
 
-```plaintext
+```
 .
 ├── Image
 ├── app           # Aplikasi Shiny
