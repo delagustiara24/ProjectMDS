@@ -137,7 +137,7 @@ Dengan menggunakan **R**, **PostgreSQL**, dan **Shiny**, proyek ini menciptakan 
 
 Struktur tabel yang digunakan dalam database Dekirume.
 
-**Contoh pembuatan tabel `Product`**:
+**Contoh pembuatan tabel `data_product`**:
 
 ```sql
 CREATE TABLE IF NOT EXISTS data_product (
