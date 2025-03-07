@@ -71,27 +71,27 @@ Dengan menggunakan **R**, **PostgreSQL**, dan **Shiny**, proyek ini menciptakan 
 
 ### - Home  
 <p align="center">
-  <img width="900" height="500" src="Image/Screenshot_Home.png">
+  <img width="900" height="500" src="Image/Home.jpg">
 </p>
 
 ### - Product  
 <p align="center">
-  <img width="900" height="500" src="Image/Screenshot_Gallery_Product.png">
+  <img width="900" height="500" src="Image/Product_1.jpg">
 </p>
 
 ### - Transactions  
 <p align="center">
-  <img width="900" height="500" src="Image/Screenshot_Transaction.png">
+  <img width="900" height="500" src="Image/Transaction.jpg">
 </p>
 
 ### - Voucher  
 <p align="center">
-  <img width="900" height="500" src="Image/Screenshot_Voucher.png">
+  <img width="900" height="500" src="Image/Voucher.jpg">
 </p>
 
 ### - Payment Methods  
 <p align="center">
-  <img width="900" height="500" src="Image/Screenshot_Payment.png">
+  <img width="900" height="500" src="Image/Payment.jpg">
 </p>
 ---
 
@@ -293,16 +293,16 @@ CREATE TABLE IF NOT EXISTS public.Customer (
 
 ## ❤️ Tim Kami
 ### Frontend & Backend Developer: [Dela Gustiara](https://github.com/delagustiara24)
-![M0501241024](Image/nama)
+![M0501241024](Image/dela.jpg)
 
 ### Database Manager: [Rupmana Br Butar Butar](https://github.com/Rupmana03)
-![M0501241071](Image/nama.png)
+![M0501241071](Image/rupmana.png)
 
 ### Copy Writer: [Rizqi Annafi Muhadi](https://github.com/rizqiannafii)
-![M0501241061](Image/nama.png)
+![M0501241061](Image/rizki.png)
 
 ### Database Designer: [Mega Maulina](https://github.com/megaamln)
-![M0501241047](Image/nama.png)
+![M0501241047](Image/mega.png)
 
 ---
 
