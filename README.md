@@ -97,7 +97,7 @@ Dengan menggunakan **R**, **PostgreSQL**, dan **Shiny**, proyek ini menciptakan 
 
 ## 🎥 Demo
 
-🔗 **Lihat demo proyek kami di:** [Dekirume Dashboard]([https://yudheeet1991.shinyapps.io/mdskel4app/#](https://github.com/delagustiara24/ProjectMDS?tab=readme-ov-file#tentang-dekirume))
+🔗 **Lihat demo proyek kami di:** [Dekirume Dashboard](https://yudheeet1991.shinyapps.io/mdskel4app/#)
 
 ---
 
@@ -118,7 +118,7 @@ Dengan menggunakan **R**, **PostgreSQL**, dan **Shiny**, proyek ini menciptakan 
 
 | **Entitas**        | **Atribut Utama** | **Relasi**                  |
 | ------------------ | ----------------- | --------------------------- |
-| **Customer**       | `customerid`      | -                           |
+| **Customer**       | `customerid`      | Transaksi                   |
 | **Product**        | `productid`       | Transaksi                   |
 | **Voucher**        | `voucherid`       | Transaksi                   |
 | **Payment Method** | `pmid`            | Transaksi                   |
@@ -140,14 +140,14 @@ Struktur tabel yang digunakan dalam database Dekirume.
 **Contoh pembuatan tabel `Product`**:
 
 ```sql
-CREATE TABLE Product (
-    ProductID VARCHAR(20) PRIMARY KEY,
-    Product_name TEXT NOT NULL,
-    Product_Description TEXT NOT NULL,
-    Product_Category TEXT NOT NULL,
-    Stock INTEGER NOT NULL,
-    Price NUMERIC NOT NULL
-);
+CREATE TABLE IF NOT EXISTS data_product (
+      ProductID VARCHAR(20) PRIMARY KEY,
+      Product_name VARCHAR(100),
+      Product_Description TEXT,
+      Product_Category VARCHAR(50),
+      Stock INT,
+      Price DECIMAL(10,2)
+    );
 ```
 
 ---
@@ -176,17 +176,17 @@ CREATE TABLE Product (
 ---
 
 ## ❤️ Tim Kami
-### Backend Developer: [nama](https://github.com/nama)
-![nama](Image/nama)
+### Frontend & Backend Developer: [Dela Gustiara](https://github.com/delagustiara24)
+![M0501241024](Image/nama)
 
-### Database Manager: [nama](https://github.com/nama)
-![nama](Image/nama.png)
+### Database Manager: [Rupmana Br Butar Butar](https://github.com/Rupmana03)
+![M0501241071](Image/nama.png)
 
-### Technical Writer: [nama](https://github.com/nama)
-![nama](Image/nama.png)
+### Copy Writer: [Rizqi Annafi Muhadi](https://github.com/rizqiannafii)
+![M0501241061](Image/nama.png)
 
-### Frontend Developer: [nama](https://github.com/nama)
-![nama](Image/nama.png)
+### Database Designer: [Mega Maulina](https://github.com/megaamln)
+![M0501241047](Image/nama.png)
 
 ---
 
