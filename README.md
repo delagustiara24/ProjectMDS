@@ -71,27 +71,27 @@ Dengan menggunakan **R**, **PostgreSQL**, dan **Shiny**, proyek ini menciptakan 
 
 ### - Home  
 <p align="center">
-  <img width="900" height="500" src="Image/Home.jpg">
+  <img width="900" height="500" src="Images/Home.jpg">
 </p>
 
 ### - Product  
 <p align="center">
-  <img width="900" height="500" src="Image/Product_1.jpg">
+  <img width="900" height="500" src="Images/Product_1.jpg">
 </p>
 
 ### - Transactions  
 <p align="center">
-  <img width="900" height="500" src="Image/Transaction.jpg">
+  <img width="900" height="500" src="Images/Transaction.jpg">
 </p>
 
 ### - Voucher  
 <p align="center">
-  <img width="900" height="500" src="Image/Voucher.jpg">
+  <img width="900" height="500" src="Images/Voucher.jpg">
 </p>
 
 ### - Payment Methods  
 <p align="center">
-  <img width="900" height="500" src="Image/Payment.jpg">
+  <img width="900" height="500" src="Images/Payment.jpg">
 </p>
 ---
 
@@ -292,16 +292,16 @@ CREATE TABLE IF NOT EXISTS public.Customer (
 
 ## ❤️ Tim Kami
 ### Frontend & Backend Developer: [Dela Gustiara](https://github.com/delagustiara24)
-![M0501241024](Image/dela.jpg)
+![M0501241024](Images/dela.jpg)
 
 ### Database Manager: [Rupmana Br Butar Butar](https://github.com/Rupmana03)
-![M0501241071](Image/rupmana.png)
+![M0501241071](Images/rupmana.png)
 
 ### Copy Writer: [Rizqi Annafi Muhadi](https://github.com/rizqiannafii)
-![M0501241061](Image/rizki.png)
+![M0501241061](Images/rizki.png)
 
 ### Database Designer: [Mega Maulina](https://github.com/megaamln)
-![M0501241047](Image/mega.png)
+![M0501241047](Images/mega.png)
 
 ---
 
