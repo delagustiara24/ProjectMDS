@@ -14,7 +14,7 @@ library(glue)
 # Konfigurasi database
 db_config <- list(
   host = "127.0.0.1",
-  port = 3307,          # Sesuaikan dengan port MySQL kamu
+  port = 3306,          # Sesuaikan dengan port MySQL kamu
   user = "root",
   password = "",
   dbname = "database_os"    # Nama database yang ingin dipakai
@@ -165,7 +165,8 @@ ui <- dashboardPage(
       # Tab Home
       tabItem(tabName = "home",
         div(style = "text-align: center;",
-            img(src = "www/logo7.png", height = 150, style = "margin-bottom: 10px;"),
+            img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/main/Images/Logo.jpg
+", height = 150, style = "margin-bottom: 10px;"),
             h2("Welcome to Dekirume!", style = "color: #2C3E50; font-size: 32px; font-weight: bold;"),
             p(strong("Your One-Stop Shop for Everything You Love!"), 
               style = "color: #2C3E50; font-size: 22px; margin-top: 10px; font-family: 'Verdana', sans-serif; font-weight: bold;")
@@ -249,7 +250,8 @@ ui <- dashboardPage(
             width = 6,
             status = "primary",
             solidHeader = TRUE,
-            img(src = "www/Image/dela.png", width = "100%", style = "border-radius: 10px;"),
+            img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/main/Images/dela.jpg
+", width = "100%", style = "border-radius: 10px;"),
             p("Develops intuitive user interfaces and efficient backend systems for seamless integration.", 
               style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
           ),
@@ -259,7 +261,8 @@ ui <- dashboardPage(
             width = 6,
             status = "primary",
             solidHeader = TRUE,
-            img(src = "www/Image/mega.png", width = "100%", style = "border-radius: 10px;"),
+            img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/main/Images/rupmana.png
+", width = "100%", style = "border-radius: 10px;"),
             p("Responsible for managing and optimizing our database systems.", 
               style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
           )
@@ -272,7 +275,8 @@ ui <- dashboardPage(
             width = 6,
             status = "primary",
             solidHeader = TRUE,
-            img(src = "www/Image/rizki.png", width = "100%", style = "border-radius: 10px;"),
+            img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/main/Images/rizki.png
+", width = "100%", style = "border-radius: 10px;"),
             p("Creates engaging content to convey brand messages clearly and effectively.", 
               style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
           ),
@@ -282,7 +286,8 @@ ui <- dashboardPage(
             width = 6,
             status = "primary",
             solidHeader = TRUE,
-            img(src = "www/rupmana.png", width = "100%", style = "border-radius: 10px;"),
+            img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/main/Images/mega.png
+", width = "100%", style = "border-radius: 10px;"),
             p("Designs and optimizes database structures for better performance.", 
               style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
           )
@@ -302,7 +307,7 @@ server <- function(input, output, session) {
   con_db <- dbConnect(
     MySQL(),
     host = "127.0.0.1",
-    port = 3307,
+    port = 3306,
     user = "root",
     password = "",
     dbname = "database_os"
