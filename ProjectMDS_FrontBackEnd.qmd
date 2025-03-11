@@ -195,7 +195,8 @@ ui <- dashboardPage(
       # Tab Home
       tabItem(tabName = "home",
         div(style = "text-align: center;",
-            img(src = "www/logo7.png", height = 150, style = "margin-bottom: 10px;"),
+            img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/main/Images/Logo.jpg
+", height = 150, style = "margin-bottom: 10px;"),
             h2("Welcome to Dekirume!", style = "color: #2C3E50; font-size: 32px; font-weight: bold;"),
             p(strong("Your One-Stop Shop for Everything You Love!"), 
               style = "color: #2C3E50; font-size: 22px; margin-top: 10px; font-family: 'Verdana', sans-serif; font-weight: bold;")
