@@ -235,6 +235,60 @@ ui <- dashboardPage(
       # Tab Gallery Produk
       tabItem(tabName = "gallery_product",
         h2("Gallery Product", align = "center", style = "color: #2C3E50; font-size: 32px; font-weight: bold;"),
+        fluidRow(
+          box(
+            title = "ANRABESS Women's Summer 2 Piece Outfits",
+            width = 4,
+            status = "primary",
+            solidHeader = TRUE,
+            img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk1.png
+", width = "100%", style = "border-radius: 10px;"),
+            p("ANRABESS Women's Summer 2 Piece Outfits Sleeveless Tank Crop Button Back Top Capri Wide Leg Pants Linen Set with Pockets.", 
+              style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+          ),
+          
+          box(
+            title = "Dokotoo Tops for Women Trendy Summer Casual",
+            width = 4,
+            status = "primary",
+            solidHeader = TRUE,
+            img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk2.png
+", width = "100%", style = "border-radius: 10px;"),
+            p("Dokotoo Tops for Women Trendy Summer Casual Cap Short Sleeve Basic Textured Solid Color Round Neck T Shirts Blouse.", 
+              style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+          ),
+           box(
+            title = "Rendy Queen Womens Oversized Sweatshirts Turtleneck",
+            width = 4,
+            status = "primary",
+            solidHeader = TRUE,
+            img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk3.png
+", width = "100%", style = "border-radius: 10px;"),
+            p("Rendy Queen Womens Oversized Sweatshirts Turtleneck Pullover Long Sleeve Hoodies Tops Fall Outfits 2023 Clothes.", 
+              style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+          )),
+        fluidRow(
+           box(
+            title = "Men's Crewneck Sweatshirts Soild Color Geometric Texture Long Sleeve Casual Pullover Shirt",
+            width = 4,
+            status = "primary",
+            solidHeader = TRUE,
+            img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk4.png
+", width = "100%", style = "border-radius: 10px;"),
+            p("Men's Crewneck Sweatshirts Soild Color Geometric Texture Long Sleeve Casual Pullover Shirt", 
+              style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+          ),
+ box(
+            title = "Yageyan Men Canvas Low top Shoes",
+            width = 4,
+            status = "primary",
+            solidHeader = TRUE,
+            img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk5.png
+", width = "100%", style = "border-radius: 10px;"),
+            p("Yageyan Men Canvas Low top Shoes Classic Casual Sneakers Black and White Fashion Shoes", 
+              style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+          ),
+        ),
         uiOutput("gallery_product_ui")
       ),
       
