@@ -1,0 +1,729 @@
+---
+title: "Front End - Manajemen Database"
+author: "Dela Gustiara"
+format: html
+editor: visual
+---
+
+## DATA
+
+```{r}
+library(shiny)
+library(shinydashboard)
+library(DBI)
+library(RMySQL)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+library(DT)
+library(glue)
+```
+
+```{r}
+# 1. Konfigurasi Database DBngin
+db_config <- list(
+  host = "127.0.0.1",
+  port = 3309,       # Port MySQL di DBngin
+  user = "root",
+  password = "",
+  dbname = "mds_kel4"  # Nama database
+)
+```
+
+```{r}
+# 2. Membuat koneksi ke MySQL server (tanpa database spesifik)
+con <- dbConnect(
+  MySQL(),
+  host = db_config$host,
+  port = db_config$port,
+  user = db_config$user,
+  password = db_config$password
+)
+```
+
+```{r}
+# 3. Membuat database jika belum ada
+tryCatch({
+  dbExecute(con, glue("CREATE DATABASE IF NOT EXISTS {db_config$dbname}"))
+  message("Database ", db_config$dbname, " berhasil dibuat/ditemukan")
+}, error = function(e) {
+  message("Gagal membuat database: ", e$message)
+})
+
+```
+
+```{r}
+# 4. Definisi Tabel dengan Relasi Primary dan Foreign Key
+table_definitions <- list(
+  data_customer = "
+    CREATE TABLE IF NOT EXISTS data_customer (
+      CustomerID INT PRIMARY KEY,
+      Gender VARCHAR(10),
+      Age INT
+    )
+  ",
+
+  data_product = "
+    CREATE TABLE IF NOT EXISTS data_product (
+      ProductID INT PRIMARY KEY,
+      Product_name VARCHAR(100),
+      Product_Description TEXT,
+      Product_Category VARCHAR(50),
+      Stock INT,
+      Price DECIMAL(10,2)
+    )
+  ",
+
+  data_voucher = "
+    CREATE TABLE IF NOT EXISTS data_voucher (
+      VoucherID INT PRIMARY KEY,
+      Voucher_name VARCHAR(100),
+      Discount DECIMAL(5,2)
+    )
+  ",
+
+  data_transaction = "
+    CREATE TABLE IF NOT EXISTS data_transaction (
+      TransactionID INT PRIMARY KEY,
+      Transaction_Date DATE,
+      Total_Price DECIMAL(10,2),
+      Quantity INT,
+      CustomerID INT,
+      ProductID INT,
+      PMID INT,
+      VoucherID INT,
+      Voucher_status VARCHAR(20),
+      FOREIGN KEY (CustomerID) REFERENCES data_customer(CustomerID) ON DELETE CASCADE ON UPDATE CASCADE,
+      FOREIGN KEY (ProductID) REFERENCES data_product(ProductID) ON DELETE CASCADE ON UPDATE CASCADE,
+      FOREIGN KEY (VoucherID) REFERENCES data_voucher(VoucherID) ON DELETE CASCADE ON UPDATE CASCADE
+    )
+  ",
+
+  data_online_shop = "
+    CREATE TABLE IF NOT EXISTS data_online_shop (
+      CustomerID INT,
+      Gender VARCHAR(10),
+      Age INT,
+      ProductID INT,
+      Product_name VARCHAR(100),
+      Product_Description TEXT,
+      Product_Category VARCHAR(50),
+      Stock INT,
+      Price DECIMAL(10,2),
+      TransactionID INT,
+      Transaction_Date DATE,
+      Total_Price DECIMAL(10,2),
+      Quantity INT,
+      VoucherID INT,
+      Voucher_name VARCHAR(100),
+      Voucher_status VARCHAR(20),
+      Discount DECIMAL(5,2),
+      PMID INT,
+      Method_name VARCHAR(50),
+      FOREIGN KEY (CustomerID) REFERENCES data_customer(CustomerID) ON DELETE CASCADE ON UPDATE CASCADE,
+      FOREIGN KEY (ProductID) REFERENCES data_product(ProductID) ON DELETE CASCADE ON UPDATE CASCADE,
+      FOREIGN KEY (VoucherID) REFERENCES data_voucher(VoucherID) ON DELETE CASCADE ON UPDATE CASCADE
+    )
+  "
+)
+```
+
+```{r}
+# 5. Eksekusi pembuatan tabel
+con_db <- dbConnect(
+  MySQL(),
+  host = db_config$host,
+  port = db_config$port,
+  user = db_config$user,
+  password = db_config$password,
+  dbname = db_config$dbname
+)
+
+for (table_name in names(table_definitions)) {
+  dbExecute(con_db, table_definitions[[table_name]])
+  message("Tabel ", table_name, " berhasil dibuat")
+}
+```
+
+```{r}
+# 6. Load Data dari File CSV
+data_customer <- read.csv("D:/A. PASCA DELA/SEMESTER 2/MDS/Praktikum/Dataset_4/data_customer.csv")
+data_online_shop <- read.csv("D:/A. PASCA DELA/SEMESTER 2/MDS/Praktikum/Dataset_4/data_online_shop.csv")
+data_product <- read.csv("D:/A. PASCA DELA/SEMESTER 2/MDS/Praktikum/Dataset_4/data_product.csv")
+data_transaction <- read.csv("D:/A. PASCA DELA/SEMESTER 2/MDS/Praktikum/Dataset_4/data_transaction.csv")
+data_voucher <- read.csv("D:/A. PASCA DELA/SEMESTER 2/MDS/Praktikum/Dataset_4/data_voucher.csv")
+
+# Hapus kolom Locations sebelum dimasukkan
+data_customer <- subset(data_customer, select = -c(Locations))
+
+# Cek struktur tabel data_customer
+dbGetQuery(con_db, "DESCRIBE data_customer;")
+
+
+# Menampilkan struktur data (gantilah View() dengan str() atau head())
+str(data_customer)
+str(data_online_shop)
+str(data_product)
+str(data_transaction)
+str(data_voucher)
+
+# Atau tampilkan 5 data pertama
+head(data_customer)
+head(data_online_shop)
+head(data_product)
+head(data_transaction)
+head(data_voucher)
+```
+
+## DELA GUSTIARA-Front END
+
+```{r}
+library(shiny)
+library(shinydashboard)
+library(DT)
+library(plotly)
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(lubridate)
+
+```
+
+### Data Produk
+
+```{r}
+# Data Produk
+product_data <- data.frame(
+  ProductID = c("GGOEAAAJ032415", "GGOEAAAJ032425", "GGOEAAAJ032435", "GGOEAAAJ032445", "GGOEAAAJ032455",
+                "GGOEWEBB082199", "GGOEWEBB082299", "GGOEYDHJ056049", "GGOEYDHJ056059", "GGOEAFKQ020599",
+                "GGOEAFKQ020499", "GGOEAFKQ020399", "GGOEAFKQ020299", "GGOEAFKQ020199", "GGOEYDHJ056029",
+                "GGOEYDHJ056039", "GGOEWEBB082399", "GGOEWEBB082499", "GGOEWEBB082599", "GGOEYDHJ056019"),
+  Product_name = c("ANRABESS Women's Summer 2 Piece Outfits", "Dokotoo Tops for Women Trendy Summer Casual",
+"rendy Queen Womens Oversized Sweatshirts Turtleneck", "Men's Crewneck Sweatshirts Soild Color",
+                   "yageyan Men Canvas Low top Shoes", "OLANLY Luxury Bathroom Rug Mat 24x16",
+                   "Clorox Toilet Plunger with Hideaway Storage Caddy", "64HYDRO 32oz 1Liter Motivational Water Bottle",
+                   "Ocean Bottle 17 oz", "Teal Office Supplies", "Amazon Basics Stapler with 1000 Staples",
+                   "Mr. Pen File Folders 18 Pack", "Gel Pens 12 Pcs Smooth Writing Pens No Bleed & Smear",
+                   "Mr. Pen- Sticky Notes 12 Pads", "64 oz Water Bottle", "Kids Water Bottle with Straw Lid 14oz",
+                   "KOHLER 4636-RL-0 Cachet ReadyLatch Elongated Toilet Seat", "Rubbermaid Commercial 15 Inch Toilet Brush",
+                   "Moen YB8099CH Mason Toilet Paper Roller", "bubba Flo Duo Refresh Insulated Water Bottle 24 oz (TEAL)"),
+  Product_Description = c("ANRABESS Women's Summer 2 Piece Outfits Sleeveless Tank Crop Button Back Top Capri Wide Leg Pants Linen Set with Pockets",
+                          "Dokotoo Tops for Women Trendy Summer Casual Cap Short Sleeve Basic Textured Solid Color Round Neck T Shirts Blouse",
+                          "rendy Queen Womens Oversized Sweatshirts Turtleneck Pullover Long Sleeve Hoodies Tops Fall Outfits 2023 Clothes",
+                          "Men's Crewneck Sweatshirts Soild Color Geometric Texture Long Sleeve Casual Pullover Shirt",
+                          "yageyan Men Canvas Low top Shoes Classic Casual Sneakers Black and White Fashion Shoes",
+                          "OLANLY Luxury Bathroom Rug Mat 24x16, Extra Soft and Absorbent Microfiber Bath Rugs, Non-Slip Plush Shaggy Bath Carpet, Machine Wash Dry, Bath Mats for Bathroom Floor, Tub and Shower, Grey",
+                          "Clorox Toilet Plunger with Hideaway Storage Caddy, 6.5'' x 6.5'' x 19.5'', White/Gray",
+                          "64HYDRO 32oz 1Liter Motivational Water Bottle with Time Marker, Ocean Turtle Beach Summer Vibe Lose My Mind Find My Soul - TTZ2001009Z",
+                          "Ocean Bottle - Recycled Stainless Steel Drinks Reusable Water Bottle - Eco-Friendly & Reusable - Sky Blue - 17 oz",
+                          "Teal Office Supplies, Teal Office Supplies and Accessories, Mint Green Stapler and Tape Dispenser Set for Women, Green Office Desk Accessories, Office Gift for Women, Office Lady, Coworkers",
+                          "Amazon Basics Stapler with 1000 Staples, Office Stapler, 25 Sheet",
+                          "Mr. Pen File Folders, 18 Pack, Morandi Colors, 1/3-Cut Tab, Letter Size, Durable Paper Folders, Office Supplies",
+                          "Gel Pens, 12 Pcs Smooth Writing Pens No Bleed & Smear, Black Ink Cute Pens Fine Point (0.5mm), Retractable Aesthetic Journaling Pens School Office Supplies for Women & Men",
+                          "Mr. Pen- Sticky Notes, 12 Pads, 3''x3'', Vintage Colors, Sticky Notes 3x3, Sticky Note, Sticky Pads, Sticky Notes Bulk, Stick Notes, Colored Sticky Notes, Sticky Note Pad, Colorful Sticky Notes",
+                          "64 oz Water Bottle, 1/2 Gallon Water Bottle, Water Bottle Holder with Shoulder Strap, Time Motivational Water Bottle - Great for Camping, Gym and Outdoor Activities, Gift",
+                          "Kids Water Bottle with Straw Lid 14oz, Vacuum Insulated 316 Stainless Steel Water Bottles for Kids for School, Leakproof Toddler Water Bottle, BPA Free and Keep Cold for 24 Hours",
+                          "KOHLER 4636-RL-0 Cachet ReadyLatch Elongated Toilet Seat, Quiet-Close Lid and Seat, Countoured Seat, Grip-Tight Bumpers and Installation Hardware, White",
+                          "Rubbermaid Commercial 15 Inch Toilet Brush, Toilet Bowl-Cleaner for Bathroom, Scrub Brush for Toilet",
+                          "Moen YB8099CH Mason Toilet Paper Roller, Chrome",
+                          "bubba Flo Duo Refresh Insulated Water Bottle, 24 oz, TEAL (TEAL)"),
+  Product_Category = c("Apparel", "Apparel", "Apparel", "Apparel", "Apparel",
+                       "Home Furniture", "Home Furniture", "Bottles", "Bottles", "Office",
+                       "Office", "Office", "Office", "Office", "Bottles",
+                       "Bottles", "Home Furniture", "Home Furniture", "Home Furniture", "Bottles"),
+  Stock = rep(100000, 20),
+  Price = c(36.99, 19.98, 38.99, 24.99, 24.99, 9.89, 15.99, 19.95, 55, 16.99,
+            8.54, 11.99, 6.49, 8.99, 24.69, 9.99, 39.6, 3.69, 1.59, 19.99)
+)
+```
+
+### UI-Dashboard Page
+
+```{r}
+# UI
+ui <- dashboardPage(
+  dashboardHeader(
+    title = div(
+      style = "text-align: center; 
+               background: linear-gradient(90deg, #1E90FF, #6A5ACD); 
+               -webkit-background-clip: text; 
+               -webkit-text-fill-color: transparent; 
+               font-size: 50px; 
+               font-weight: bold; 
+               font-family: 'Arial Black', sans-serif; 
+               text-shadow: 2px 2px 4px rgba(0,0,0,0.3);",
+      h1("Dekirume", style = "margin: 0;")
+    )
+  ),
+  
+  # Sidebar
+  dashboardSidebar(
+    sidebarMenu(
+      menuItem("Home", tabName = "home", icon = icon("home")),
+      menuItem("Products", icon = icon("boxes"),
+               menuSubItem("Product Recommendation", tabName = "product_recommendation", icon = icon("thumbs-up")),
+               menuSubItem("Product Category", tabName = "product_category", icon = icon("list")),
+               menuSubItem("Gallery Produk", tabName = "gallery_produk", icon = icon("image"))
+      ),
+      menuItem("Transactions", tabName = "transactions", icon = icon("shopping-cart")),
+      menuItem("Vouchers", tabName = "vouchers", icon = icon("ticket-alt")),
+      menuItem("Payment Methods", tabName = "payment_methods", icon = icon("credit-card")),
+      menuItem("Our Team", tabName = "our_team", icon = icon("users"))
+    )
+  ),
+
+  # Body
+  dashboardBody(
+    tags$head(
+      tags$style(HTML("
+        /* Custom CSS for the dashboard */
+        .skin-blue .main-header .logo {
+          background-color: #FF4500;
+          color: white;
+          font-weight: bold;
+        }
+        .skin-blue .main-header .navbar {
+          background-color: #FF4500;
+        }
+        .skin-blue .main-sidebar {
+          background-color: #2C3E50;
+        }
+        .skin-blue .main-sidebar .sidebar-menu > li > a {
+          color: white;
+        }
+        .skin-blue .main-sidebar .sidebar-menu > li:hover > a {
+          background-color: #34495E;
+        }
+        .box {
+          border-radius: 10px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .box-title {
+          font-size: 18px;
+          font-weight: bold;
+        }
+        .value-box {
+          border-radius: 10px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+      "))
+    ),
+    tabItems(
+      
+      # Tab Home
+      tabItem(tabName = "home",
+        div(style = "text-align: center;",
+            img(src = "www/logo7.png", height = 150, style = "margin-bottom: 10px;"),
+            h2("Welcome to Dekirume!", style = "color: #FF4500; font-size: 32px; font-weight: bold;"),
+            p(strong("Your One-Stop Shop for Everything You Love!"), 
+              style = "color: #FF4500; font-size: 22px; margin-top: 10px; font-family: 'Verdana', sans-serif; font-weight: bold;")
+        ),
+        fluidRow(
+          valueBoxOutput("total_sales", width = 3),
+          valueBoxOutput("total_products_sold", width = 3),
+          valueBoxOutput("total_customers", width = 3),
+          valueBoxOutput("total_discounts", width = 3)
+        ),
+        box(title = "Latest Updates", width = 12, status = "info", solidHeader = TRUE, p("Stay tuned for new product releases and offers!")),
+        fluidRow(
+          box(title = "Monthly Sales", width = 12, status = "primary", solidHeader = TRUE, plotlyOutput("monthly_sales_plot"))
+        ),
+        fluidRow(
+          box(title = "Customer Demographics", width = 12, status = "primary", solidHeader = TRUE, plotlyOutput("customer_demographics_plot"))
+        )
+      ),
+      
+      # Tab Product Recommendation
+      tabItem(tabName = "product_recommendation",
+        h2("Product Recommendation", align = "center", style = "color: #FF4500; font-size: 32px; font-weight: bold;"),
+        fluidRow(
+          box(title = "Best Selling Products by Location", width = 6, status = "primary", solidHeader = TRUE, plotlyOutput("location_plot")),
+          box(title = "Best Selling Products by Gender", width = 6, status = "info", solidHeader = TRUE, plotlyOutput("gender_plot"))
+        ),
+        fluidRow(
+          box(title = "Top 5 Best Selling Products", width = 6, status = "success", solidHeader = TRUE, plotlyOutput("best_selling_plot"))
+        )
+      ),
+      
+      # Tab Product Category
+      tabItem(tabName = "product_category",
+        h2("Product Category", align = "center", style = "color: #FF4500; font-size: 32px; font-weight: bold;"),
+            uiOutput("product_category_ui")  # Menampilkan grafik untuk setiap kategori
+      ),
+      
+      # Tab Gallery Produk
+      tabItem(tabName = "gallery_produk",
+        h2("Gallery Produk", align = "center", style = "color: #FF4500; font-size: 32px; font-weight: bold;"),
+        uiOutput("gallery_produk_ui")
+      ),
+      
+      # Tab Transactions
+      tabItem(tabName = "transactions",
+        h2("Transactions", align = "center", style = "color: #FF4500; font-size: 32px; font-weight: bold;"),
+        box(title = "Recent Transactions", width = 12, status = "info", solidHeader = TRUE, dataTableOutput("out_tbl_transaction"))
+      ),
+      
+      # Tab Vouchers
+      tabItem(tabName = "vouchers",
+        h2("Available Vouchers", align = "center", style = "color: #FF4500; font-size: 32px; font-weight: bold;"),
+        fluidRow(
+          box(title = "Choose Vouchers", width = 6, status = "primary", solidHeader = TRUE,
+              selectizeInput("voucher_select", "Select Voucher(s)", choices = NULL, multiple = TRUE)),
+          box(title = "Voucher Usage by Age Group", width = 6, status = "danger", solidHeader = TRUE, plotlyOutput("voucher_usage_plot"))
+        ),
+        fluidRow(
+          box(title = "Voucher Usage by Gender", width = 6, status = "success", solidHeader = TRUE, plotlyOutput("voucher_usage_gender_plot")),
+          box(title = "Voucher Usage by Category", width = 6, status = "warning", solidHeader = TRUE, plotlyOutput("voucher_usage_category_plot"))
+        )
+      ),
+      
+      # Tab Payment Methods
+      tabItem(tabName = "payment_methods",
+        h2("Payment Methods", align = "center", style = "color: #FF4500; font-size: 32px; font-weight: bold;"),
+        fluidRow(
+          column(4, actionButton("pay_card", "💳 Credit/Debit Card", style = "width: 100%; background-color: #007bff; color: white;")),
+          column(4, actionButton("pay_wallet", "📱 Digital Wallets", style = "width: 100%; background-color: #28a745; color: white;")),
+          column(4, actionButton("pay_paypal", "🅿 PayPal", style = "width: 100%; background-color: #ffc107; color: black;"))
+        )
+      ),
+      
+      # Tab Our Team
+      tabItem(tabName = "our_team",
+        h2("Meet Our Team", align = "center", style = "color: #2C3E50; font-size: 32px; font-weight: bold;"),
+        p("We are a dedicated team passionate about delivering the best solutions.", 
+          style = "text-align: center; font-size: 18px; color: #555; margin-bottom: 30px;"),
+        
+        fluidRow(
+          # Dela Gustiara - Frontend Developer
+          box(
+            title = "Dela Gustiara (M0501241024) - Frontend Developer",
+            width = 6,
+            status = "primary",
+            solidHeader = TRUE,
+            img(src = "www/Image/dela.png", width = "100%", style = "border-radius: 10px;"),
+            p("Focuses on creating engaging and responsive user interfaces.", 
+              style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+          ),
+          
+          # Mega Maulina - Database Manager
+          box(
+            title = "Mega Maulina (M0501241047) - Database Manager",
+            width = 6,
+            status = "primary",
+            solidHeader = TRUE,
+            img(src = "www/Image/mega.png", width = "100%", style = "border-radius: 10px;"),
+            p("Responsible for managing and optimizing our database systems.", 
+              style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+          )
+        ),
+        
+        fluidRow(
+          # Rizqi Annafi Muhadi - Backend Developer
+          box(
+            title = "Rizqi Annafi Muhadi (M0501241061) - Backend Developer",
+            width = 6,
+            status = "primary",
+            solidHeader = TRUE,
+            img(src = "www/Image/rizki.png", width = "100%", style = "border-radius: 10px;"),
+            p("Develops and maintains the server-side logic and database connections.", 
+              style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+          ),
+          
+          # Rupmana Br Butar Butar - Database Designer
+          box(
+            title = "Rupmana Br Butar Butar (M0501241071) - Database Designer",
+            width = 6,
+            status = "primary",
+            solidHeader = TRUE,
+            img(src = "www/rupmana.png", width = "100%", style = "border-radius: 10px;"),
+            p("Designs and optimizes database structures for better performance.", 
+              style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+          )
+        )
+      )
+    )
+  )
+)
+```
+
+### Server-Dashboard Page
+
+```{r}
+# Server
+server <- function(input, output, session) {
+  
+  # Read the CSV data from the GitHub link
+  url <- "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/main/Dataset_4/data_online_shop.csv"
+  data <- reactive({
+    tryCatch({
+      read_csv(url)
+    }, error = function(e) {
+      showNotification("Failed to load data. Please check the URL or your internet connection.", type = "error")
+      return(NULL)
+    })
+  })
+  
+  # Data Preprocessing
+  processed_data <- reactive({
+    df <- data()
+    if (is.null(df)) return(NULL)
+    df$Age <- as.numeric(as.character(df$Age))
+    df <- df[!is.na(df$Age), ]  # Remove rows with NA in Age
+    df$Age_Group <- cut(df$Age, breaks = c(0, 18, 30, 50, 100),
+                        labels = c("Under 18", "18-30", "31-50", "Over 50"),
+                        include.lowest = TRUE)
+    df$Transaction_Date <- as.Date(df$Transaction_Date, format = "%d.%m.%y")  # Convert to Date
+    df$Month <- format(df$Transaction_Date, "%Y-%m")  # Extract month
+    df
+  })
+  
+  # Update Voucher Select Input
+  observe({
+    voucher_choices <- unique(processed_data()$Voucher_name)
+    updateSelectizeInput(session, "voucher_select", choices = voucher_choices)
+  })
+  
+  # Calculate Total Sales
+  output$total_sales <- renderValueBox({
+    total_sales <- sum(processed_data()$Total_Price, na.rm = TRUE)
+    valueBox(
+      value = format(total_sales, big.mark = ","),
+      subtitle = "Total Sales ($)",
+      icon = icon("dollar-sign"),
+      color = "green"
+    )
+  })
+  
+  # Calculate Total Products Sold
+  output$total_products_sold <- renderValueBox({
+    total_products_sold <- sum(processed_data()$Quantity, na.rm = TRUE)
+    valueBox(
+      value = format(total_products_sold, big.mark = ","),
+      subtitle = "Total Products Sold",
+      icon = icon("shopping-cart"),
+      color = "blue"
+    )
+  })
+  
+  # Calculate Total Customers
+  output$total_customers <- renderValueBox({
+    total_customers <- length(unique(processed_data()$CustomerID))
+    valueBox(
+      value = format(total_customers, big.mark = ","),
+      subtitle = "Total Customers",
+      icon = icon("users"),
+      color = "orange"
+    )
+  })
+  
+  # Calculate Total Discounts Given
+  output$total_discounts <- renderValueBox({
+    total_discounts <- sum(processed_data()$Discount, na.rm = TRUE)
+    valueBox(
+      value = format(total_discounts, big.mark = ","),
+      subtitle = "Total Discounts Given ($)",
+      icon = icon("tags"),
+      color = "red"
+    )
+  })
+  
+  # Display the first few rows of the data for reference
+  output$out_tbl_transaction <- renderDataTable({
+    datatable(processed_data())
+  })
+
+  # Best Selling Products by Location
+  output$location_plot <- renderPlotly({
+    location_sales <- processed_data() %>%
+      group_by(Locations) %>%
+      summarise(Total_Sales = sum(Total_Price))
+    
+    plot_ly(location_sales, x = ~Locations, y = ~Total_Sales, type = 'bar', 
+            marker = list(color = 'rgb(55, 83, 109)')) %>%
+      layout(title = "Best Selling Products by Location",
+             xaxis = list(title = "Location"),
+             yaxis = list(title = "Total Sales"))
+  })
+
+  # Best Selling Products by Gender
+  output$gender_plot <- renderPlotly({
+    gender_sales <- processed_data() %>%
+      group_by(Gender) %>%
+      summarise(Total_Sales = sum(Total_Price))
+    
+    plot_ly(gender_sales, x = ~Gender, y = ~Total_Sales, type = 'bar', 
+            marker = list(color = 'rgb(26, 118, 255)')) %>%
+      layout(title = "Best Selling Products by Gender",
+             xaxis = list(title = "Gender"),
+             yaxis = list(title = "Total Sales"))
+  })
+  
+  # Top 5 Best Selling Products
+  output$best_selling_plot <- renderPlotly({
+    product_sales <- processed_data() %>%
+      group_by(Product_name) %>%
+      summarise(Total_Sales = sum(Total_Price)) %>%
+      arrange(desc(Total_Sales)) %>%
+      head(5)
+    
+    plot_ly(product_sales, x = ~Product_name, y = ~Total_Sales, type = 'bar',
+            marker = list(color = 'rgb(26, 118, 255)')) %>%
+      layout(title = "Top 5 Best Selling Products",
+             xaxis = list(title = 'Product'),
+             yaxis = list(title = 'Sales'))
+  })
+  
+  # Voucher Usage by Age Group
+  output$voucher_usage_plot <- renderPlotly({
+    req(input$voucher_select)  # Ensure at least one voucher is selected
+    voucher_usage <- processed_data() %>%
+      filter(Voucher_name %in% input$voucher_select) %>%
+      group_by(Age_Group) %>%
+      summarise(Count = n())
+    
+    plot_ly(voucher_usage, x = ~Age_Group, y = ~Count, type = 'bar',
+            marker = list(color = 'rgb(158, 202, 225)')) %>%
+      layout(title = "Voucher Usage by Age Group",
+             xaxis = list(title = "Age Group"),
+             yaxis = list(title = "Count"))
+  })
+  
+  # Voucher Usage by Gender
+  output$voucher_usage_gender_plot <- renderPlotly({
+    req(input$voucher_select)  # Ensure at least one voucher is selected
+    voucher_usage_gender <- processed_data() %>%
+      filter(Voucher_name %in% input$voucher_select) %>%
+      group_by(Gender) %>%
+      summarise(Count = n())
+    
+    plot_ly(voucher_usage_gender, x = ~Gender, y = ~Count, type = 'bar',
+            marker = list(color = 'rgb(26, 118, 255)')) %>%
+      layout(title = "Voucher Usage by Gender",
+             xaxis = list(title = "Gender"),
+             yaxis = list(title = "Count"))
+  })
+  
+  # Voucher Usage by Category (Pie Chart)
+  output$voucher_usage_category_plot <- renderPlotly({
+    req(input$voucher_select)  # Ensure at least one voucher is selected
+    voucher_usage_category <- processed_data() %>%
+      filter(Voucher_name %in% input$voucher_select) %>%
+      group_by(Voucher_name) %>%
+      summarise(Count = n())
+    
+    plot_ly(voucher_usage_category, labels = ~Voucher_name, values = ~Count, type = 'pie',
+            marker = list(colors = c('rgb(55, 83, 109)', 'rgb(26, 118, 255)', 'rgb(158, 202, 225)'))) %>%
+      layout(title = "Voucher Usage by Category",
+             showlegend = TRUE)
+  })
+  
+  # Monthly Sales Plot
+  output$monthly_sales_plot <- renderPlotly({
+    monthly_sales <- processed_data() %>%
+      group_by(Month) %>%
+      summarise(Total_Sales = sum(Total_Price))
+    
+    plot_ly(monthly_sales, x = ~Month, y = ~Total_Sales, type = 'scatter', mode = 'lines+markers',
+            line = list(color = 'rgb(55, 83, 109)'), marker = list(color = 'rgb(26, 118, 255)')) %>%
+      layout(title = "Monthly Sales",
+             xaxis = list(title = "Month"),
+             yaxis = list(title = "Total Sales ($)"))
+  })
+  
+  # Customer Demographics
+  output$customer_demographics_plot <- renderPlotly({
+    customer_demographics <- processed_data() %>%
+      group_by(Age_Group, Gender) %>%
+      summarise(Count = n())
+    
+    plot_ly(customer_demographics, x = ~Age_Group, y = ~Count, color = ~Gender, type = 'bar') %>%
+      layout(title = "Customer Demographics",
+             xaxis = list(title = "Age Group"),
+             yaxis = list(title = "Count"),
+             barmode = 'group')
+  })
+  
+ # Product Category UI (menampilkan grafik 3 produk tertinggi per kategori)
+output$product_category_ui <- renderUI({
+  categories <- unique(product_data$Product_Category)
+  num_categories <- length(categories)
+  
+  # Bagi kategori menjadi 2 kolom
+  split_categories <- split(categories, rep(1:2, length.out = num_categories))
+  
+  fluidRow(
+    lapply(1:2, function(i) {
+      column(
+        width = 6,
+        lapply(split_categories[[i]], function(category) {
+          box(
+            title = paste("Top 3 Products in", category),
+            width = 12, status = "primary", solidHeader = TRUE,
+            style = "border-radius: 8px; box-shadow: 2px 2px 6px rgba(0,0,0,0.1);",
+            plotlyOutput(paste0("bar_chart_", gsub(" ", "_", category)))
+          )
+        })
+      )
+    })
+  )
+})
+
+# Bar chart untuk 3 produk tertinggi per kategori
+lapply(unique(product_data$Product_Category), function(category) {
+  output[[paste0("bar_chart_", gsub(" ", "_", category))]] <- renderPlotly({
+    top_products <- product_data %>%
+      filter(Product_Category == category) %>%
+      arrange(desc(Price)) %>%
+      head(3)
+    
+    plot_ly(top_products, x = ~reorder(Product_name, Price), y = ~Price, type = 'bar',
+            marker = list(color = ~Price, colorscale = 'Blues', showscale = FALSE),
+            text = ~paste("Product:", Product_name, "<br>Price: $", Price),
+            hoverinfo = 'text') %>%
+      layout(
+        title = paste("Top 3 Products in", category),
+        xaxis = list(title = "Product Name", tickangle = -45),
+        yaxis = list(title = "Price ($)"),
+        margin = list(b = 80, l = 50, r = 50, t = 40),
+        paper_bgcolor = 'rgba(0,0,0,0)',
+        plot_bgcolor = 'rgba(0,0,0,0)',
+        showlegend = FALSE
+      ) %>%
+      config(displayModeBar = FALSE)
+  })
+})
+  # Gallery Produk UI
+  output$gallery_produk_ui <- renderUI({
+    categories <- unique(product_data$Product_Category)
+    lapply(categories, function(category) {
+      box(
+        title = category, width = 12, status = "primary", solidHeader = TRUE,
+        fluidRow(
+          lapply(product_data %>% filter(Product_Category == category) %>% split(1:nrow(.)), function(product) {
+            column(
+              width = 3,
+              box(
+                width = 12, status = "info",
+                img(src = paste0("www/", product$ProductID, ".png"), width = "100%"),
+                h4(product$Product_name),
+                p(product$Product_Description),
+                p(paste("Price: $", product$Price)),
+                actionButton(paste0("buy_", product$ProductID), "Buy Now", class = "btn-primary", onclick = paste0("window.open('", product$ProductID, "')"))
+              )
+            )
+          })
+        )
+      )
+    })
+  })
+}
+```
+
+```{r}
+# Run the application
+shinyApp(ui = ui, server = server)
+```
+
+```{r}
+
+```
