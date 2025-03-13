@@ -120,38 +120,84 @@ Dengan menggunakan **R**, **PostgreSQL**, dan **Shiny**, proyek ini menciptakan 
 ## 🔗 ERD
 
 📊 **Entity-Relationship Diagram (ERD)**  
-![ERD](Image/online_shop_erd.png)
+
+Dokumentasi ini menyajikan Entity-Relationship Diagram (ERD) yang digunakan untuk memodelkan struktur data dalam sistem. ERD merupakan representasi visual dari entitas, atribut, serta hubungan antar entitas dalam basis data, yang bertujuan untuk memberikan pemahaman yang jelas mengenai desain dan alur data.
+
+![ERD](Image/online_shop_ERD.png)
 
 ---
 
 ## 📊 Deskripsi Data
+ 
+Repositori ini berisi data dan dokumentasi terkait Dekirume. Data ini dikumpulkan dan diproses untuk mendukung analisis serta pengembangan lebih lanjut dalam konteks penggunaannya. Struktur tabel yang digunakan dalam database Dekirume.
 
-Dalam sistem ini, kita menggunakan PostgreSQL sebagai database utama untuk menyimpan dan mengelola data e-commerce Dekirume. Struktur tabel yang digunakan dalam database Dekirume.
+### Create Table Customer
+Tabel customer berisi informasi penting mengenai data pelanggan, memungkinkan pengguna untuk mengakses berbagai detail terkait identitas pelanggan. Informasi yang tercakup dalam tabel ini meliputi Customer ID sebagai identitas unik setiap pelanggan, jenis kelamin, serta lokasi pelanggan yang mencakup empat wilayah utama, yaitu California, New York, Chicago, dan New Jersey. Selain itu, tabel ini juga mencatat rentang usia pelanggan, yang berada dalam kisaran 17 hingga 63 tahun.
 
-### 1️⃣ Membuat Database
-The Sigmaria Market Online Shop database stores information that represents interconnected data attributes for the analysis.
+| Attribute          | Type                  | Description                     |
+|:-------------------|:----------------------|:--------------------------------|
+| customerid         | integer               | Id Customer                     |
+| gender             | varchar               | Jenis Kelamin                   |
+| locations          | varchar		           | Lokasi                          |
+| age		             | integer	 	           | Umur	                           |
+
+dengan syntax SQL sebagai berikut : 
 
 ```sql
-CREATE DATABASE Online_Shop
-    WITH
-    OWNER = postgres
-    ENCODING = 'UTF8'
-    CONNECTION LIMIT = -1
-    IS_TEMPLATE = False;
+CREATE TABLE IF NOT EXISTS data_customer (
+      CustomerID INT PRIMARY KEY,
+      Gender VARCHAR(10),
+      Locations VARCHAR(50),
+      Age INT
+    );
+```
+### Create Table Voucher
+Tabel voucher menyajikan informasi mendetail mengenai voucher yang tersedia. Selain mengetahui jumlah produk yang memenuhi syarat untuk penggunaan voucher, pengguna juga dapat mengakses berbagai data penting terkait voucher yang dapat digunakan. Informasi yang disediakan mencakup nama voucher sebagai identitasnya serta nilai diskon yang diberikan melalui voucher tersebut.
+
+| Attribute                  | Type                  | Description                     		       |
+|:---------------------------|:----------------------|:------------------------------------------|
+| voucherid                  | varchar               | Id Voucher                       	       |
+| voucher_name               | varchar	      	     | Nama Voucher                  		         |
+| discount                   | decimal(5,2)	         | Besaran Diskon dari Setiap Voucher        |	
+
+dengan syntax SQL sebagai berikut :
+
+```sql
+CREATE TABLE IF NOT EXISTS data_voucher (
+      VoucherID VARCHAR(10) PRIMARY KEY,
+      Voucher_name VARCHAR(100),
+      Discount DECIMAL(5,2)
+    );
+```
+### Create Table Payment Method
+Tabel payment method menyajikan informasi mengenai metode pembayaran yang tersedia bagi pengguna. Tabel ini mencakup empat jenis metode pembayaran utama, yaitu kartu, PayPal, dompet digital, serta metode lainnya. Setiap metode pembayaran diidentifikasi dengan PMID (Payment Method ID) sebagai kode unik, serta nama metode pembayaran yang sesuai dengan setiap ID.
+
+| Attribute          | Type                  | Description                     |
+|:-------------------|:----------------------|:--------------------------------|
+| pmid               | varchar               | Id pay method                   |
+| method_name        | varchar		           | nama metode pembayaran	         |
+
+dengan syntax SQL sebagai berikut :
+
+```sql
+CREATE TABLE IF NOT EXISTS data_payment_method (
+      PMID VARCHAR(10) PRIMARY KEY,
+      Method_name VARCHAR(50)
+    );
 ```
 ### Create Table Product
 Tabel produk berfungsi sebagai sumber informasi utama bagi pengguna untuk mengetahui detail berbagai produk yang tersedia di pasar Dekirume. Melalui tabel ini, pengguna dapat mengakses data penting, termasuk ID produk sebagai identitas unik, nama produk, deskripsi yang menjelaskan karakteristiknya, kategori produk untuk klasifikasi yang lebih terstruktur, jumlah stok yang mencerminkan ketersediaan barang, serta harga yang menjadi acuan dalam transaksi.
 
 | Attribute                  | Type                  | Description                     		       |
-|:---------------------------|:----------------------|:------------------------------------------------|
+|:---------------------------|:----------------------|:------------------------------------------|
 | productid                  | varchar               | Id Produk                       		       |
-| product_name               | varchar		     | Nama Produk                   		       |
-| product_description        | text		     | Deskripsi Produk                      	       |	
-| product_category           | varchar		     | Kategori Produk                 		       |
-| stock	                     | integer		     | Jumlah Stok dari Setiap Produk	               |
-| price		    	     | decimal(10,2)         | Harga dari Masing-Masing Produk                 |
+| product_name               | varchar		           | Nama Produk                   		         |
+| product_description        | text		               | Deskripsi Produk                      	   |	
+| product_category           | varchar		           | Kategori Produk                 		       |
+| stock	                     | integer		           | Jumlah Stok dari Setiap Produk	           |
+| price		    	             | decimal(10,2)         | Harga dari Masing-Masing Produk           |
 
-with the SQL script :
+dengan syntax SQL sebagai berikut :
 
 ```sql
 CREATE TABLE IF NOT EXISTS data_product (
@@ -166,19 +212,19 @@ CREATE TABLE IF NOT EXISTS data_product (
 ### Create Table Transaction
 Tabel transaksi berfungsi sebagai wadah penyimpanan data yang mencatat seluruh aktivitas transaksi yang terjadi. Melalui tabel ini, pengguna dapat mengakses berbagai informasi penting terkait transaksi, termasuk ID transaksi sebagai identitas unik, tanggal transaksi untuk pencatatan waktu, serta total harga yang mencerminkan nilai keseluruhan dari setiap transaksi. Selain itu, tabel ini juga mencakup jumlah produk yang dibeli, ID pelanggan untuk mengidentifikasi pembeli, ID produk yang menunjukkan barang yang dibeli, ID metode pembayaran untuk mencatat cara pembayaran yang digunakan, serta ID voucher beserta status penggunaannya.
 
-| Attribute                  | Type                  | Description                     		       |
-|:---------------------------|:----------------------|:------------------------------------------------|
+| Attribute                  | Type                  | Description                       		       |
+|:---------------------------|:----------------------|:--------------------------------------------|
 | transactionid              | integer               | Id Transaksi                       	       |
-| transaction_date           | date		     | Tanggal Transaksi                  	       |
-| total_price                | decimal		     | Total Harga dari Tiap Transaksi                 |	
-| quantity                   | integer		     | Jumlah Produk	                	       |
-| customerid                 | integer               | Id Customer                                     |
-| productid    	    	     | varchar               | Id Produk	                               |
-| pmid	                     | varchar               | Id Pay Method     			       |
-| voucherid		     | varchar               | Id Voucher				       |
-| voucher_status             | varchar		     | Status Voucher                   	       |
+| transaction_date           | date		               | Tanggal Transaksi                  	       |
+| total_price                | decimal	      	     | Total Harga dari Tiap Transaksi             |	
+| quantity                   | integer		           | Jumlah Produk	                	           |
+| customerid                 | integer               | Id Customer                                 |
+| productid    	      	     | varchar               | Id Produk	                                 |
+| pmid	                     | varchar               | Id Pay Method     			                     |
+| voucherid		               | varchar               | Id Voucher				                           |
+| voucher_status             | varchar		           | Status Voucher                     	       |
 
-with the SQL script :
+dengan syntax SQL sebagai berikut :
 
 ```sql
 CREATE TABLE IF NOT EXISTS data_transaction (
@@ -200,60 +246,6 @@ CREATE TABLE IF NOT EXISTS data_transaction (
       FOREIGN KEY (PMID) REFERENCES data_payment_method(PMID) ON DELETE CASCADE ON UPDATE CASCADE
     );
 ```
-### Create Table Voucher
-Tabel voucher menyajikan informasi mendetail mengenai voucher yang tersedia. Selain mengetahui jumlah produk yang memenuhi syarat untuk penggunaan voucher, pengguna juga dapat mengakses berbagai data penting terkait voucher yang dapat digunakan. Informasi yang disediakan mencakup nama voucher sebagai identitasnya serta nilai diskon yang diberikan melalui voucher tersebut.
-
-| Attribute                  | Type                  | Description                     		       |
-|:---------------------------|:----------------------|:------------------------------------------------|
-| voucherid                  | varchar               | Id Voucher                       	       |
-| voucher_name               | varchar		     | Nama Voucher                  		       |
-| discount                   | decimal(5,2)	     | Besaran Diskon dari Setiap Voucher              |	
-
-with the SQL script :
-
-```sql
-CREATE TABLE IF NOT EXISTS data_voucher (
-      VoucherID VARCHAR(10) PRIMARY KEY,
-      Voucher_name VARCHAR(100),
-      Discount DECIMAL(5,2)
-    );
-```
-### Create Table Payment Method
-Tabel payment method menyajikan informasi mengenai metode pembayaran yang tersedia bagi pengguna. Tabel ini mencakup empat jenis metode pembayaran utama, yaitu kartu, PayPal, dompet digital, serta metode lainnya. Setiap metode pembayaran diidentifikasi dengan PMID (Payment Method ID) sebagai kode unik, serta nama metode pembayaran yang sesuai dengan setiap ID.
-
-| Attribute          | Type                  | Description                     |
-|:-------------------|:----------------------|:--------------------------------|
-| pmid               | varchar               | Id pay method                   |
-| method_name        | varchar		     | nama metode pembayaran	       |
-
-with the SQL script :
-
-```sql
-CREATE TABLE IF NOT EXISTS data_payment_method (
-      PMID VARCHAR(10) PRIMARY KEY,
-      Method_name VARCHAR(50)
-    );
-```
-### Create Table Customer
-Tabel customer berisi informasi penting mengenai data pelanggan, memungkinkan pengguna untuk mengakses berbagai detail terkait identitas pelanggan. Informasi yang tercakup dalam tabel ini meliputi Customer ID sebagai identitas unik setiap pelanggan, jenis kelamin, serta lokasi pelanggan yang mencakup empat wilayah utama, yaitu California, New York, Chicago, dan New Jersey. Selain itu, tabel ini juga mencatat rentang usia pelanggan, yang berada dalam kisaran 17 hingga 63 tahun.
-
-| Attribute          | Type                  | Description                     |
-|:-------------------|:----------------------|:--------------------------------|
-| customerid         | integer               | Id Customer                     |
-| gender             | varchar               | Jenis Kelamin                   |
-| locations          | varchar		     | Lokasi                          |
-| age		     | integer	 	     | Umur	                       |
-
-with the SQL script : 
-
-```sql
-CREATE TABLE IF NOT EXISTS data_customer (
-      CustomerID INT PRIMARY KEY,
-      Gender VARCHAR(10),
-      Locations VARCHAR(50),
-      Age INT
-    );
-```
 
 ---
 
@@ -263,7 +255,11 @@ CREATE TABLE IF NOT EXISTS data_customer (
 
 ```
 .
-├── Image
+├── Dataset_4_New          # Data proyek
+│   ├── csv
+│   └── sql
+│       └── db.sql
+├── Images
 ├── app           # Aplikasi Shiny
 │   ├── css
 │   ├── server.R
@@ -281,16 +277,16 @@ CREATE TABLE IF NOT EXISTS data_customer (
 ---
 
 ## ❤️ Tim Kami
-### Frontend & Backend Developer: [Dela Gustiara](https://github.com/delagustiara24)
+### Frontend & Backend Developer: [Dela Gustiara][M0501241024](https://github.com/delagustiara24)
 ![M0501241024](Images/dela.jpg)
 
-### Database Manager: [Rupmana Br Butar Butar](https://github.com/Rupmana03)
+### Database Manager: [Rupmana Br Butar Butar][M0501241071](https://github.com/Rupmana03)
 ![M0501241071](Images/rupmana.png)
 
-### Copy Writer: [Rizqi Annafi Muhadi](https://github.com/rizqiannafii)
+### Copy Writer: [Rizqi Annafi Muhadi][M0501241061](https://github.com/rizqiannafii)
 ![M0501241061](Images/rizki.png)
 
-### Database Designer: [Mega Maulina](https://github.com/megaamln)
+### Database Designer: [Mega Maulina][M0501241047](https://github.com/megaamln)
 ![M0501241047](Images/mega.png)
 
 ---
