@@ -14,7 +14,7 @@
 - [Tentang Proyek](#tentang-proyek)
 - [Tangkapan Layar](#tangkapan-layar)
 - [Demo](#demo)
-- [Skema Database](#skema-database)
+- [Struktur Database](#struktur-database)
 - [ERD](#erd)
 - [Deskripsi Data](#deskripsi-data)
 - [Struktur Folder](#struktur-folder)
@@ -62,7 +62,7 @@ Dekirume juga dirancang untuk membantu analisis tren penjualan melalui sistem da
 
 Proyek ini dikembangkan sebagai bagian dari tugas akhir mata kuliah *Manajemen Data Statistik*. Tujuan utama dari sistem ini adalah untuk menganalisis pola penjualan, perilaku pelanggan, dan efektivitas voucher dalam transaksi e-commerce.
 
-Dengan menggunakan **R**, **PostgreSQL**, dan **Shiny**, proyek ini menciptakan dashboard interaktif untuk memudahkan visualisasi dan analisis data secara real-time.
+Dengan menggunakan **R** dan **Shiny**, proyek ini menciptakan dashboard interaktif untuk memudahkan visualisasi dan analisis data secara real-time.
 
 ---
 
@@ -75,7 +75,7 @@ Dengan menggunakan **R**, **PostgreSQL**, dan **Shiny**, proyek ini menciptakan 
 
 ### - Product  
 <p align="center">
-  <img width="900" height="500" src="Images/Product_1.jpg">
+  <img width="900" height="500" src="Images/Product.jpg">
 </p>
 
 ### - Transactions  
@@ -100,12 +100,7 @@ Dengan menggunakan **R**, **PostgreSQL**, dan **Shiny**, proyek ini menciptakan 
 
 ---
 
-## 🗂️ Skema Database
-
-📌 **Diagram Relasi Antar Entitas**  
-![Skema Database](Image/skema.png)
-
-### 📌 Struktur Database
+## 📌 Struktur Database
 
 | **Entitas**        | **Atribut Utama** | **Relasi**                  |
 | ------------------ | ----------------- | --------------------------- |
@@ -256,20 +251,18 @@ CREATE TABLE IF NOT EXISTS data_transaction (
 ```
 .
 ├── Dataset_4_New          # Data proyek
-│   ├── csv
-│   └── sql
-│       └── db.sql
+│   └── csv
 ├── Images
-├── app           # Aplikasi Shiny
+├── app                    # Aplikasi Shiny
 │   ├── css
 │   ├── server.R
 │   └── ui.R
-├── data          # Data proyek
+├── data                   # Data proyek
 │   ├── csv
 │   └── sql
 │       └── db.sql
-├── doc           # Dokumentasi proyek
-├── src           # Kode sumber proyek
+├── doc                    # Dokumentasi proyek
+├── src                    # Kode sumber proyek
 ├── .gitignore
 └── README.md
 ```
