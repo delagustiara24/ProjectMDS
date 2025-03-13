@@ -1,11 +1,9 @@
 ---
-title: "ui"
-author: "Dela Gustiara"
+title: "UI"
+author: "Kelompok 4"
 format: html
 editor: visual
 ---
-
-### Front End
 
 ```{r}
 library(DBI)
@@ -59,7 +57,9 @@ message("Terhubung ke database '", db_config$dbname, "'.")
 # Nanti setelah selesai kerja
 # dbDisconnect(con)
 
+```
 
+```{r}
 library(shiny)
 library(shinydashboard)
 library(DT)
@@ -68,71 +68,24 @@ library(ggplot2)
 library(dplyr)
 library(readr)
 library(lubridate)
+```
 
-### Data Produk
-
-# Data Produk
-product_data <- data.frame(
-  ProductID = c("GGOEAAAJ032415", "GGOEAAAJ032425", "GGOEAAAJ032435", "GGOEAAAJ032445", "GGOEAAAJ032455",
-                "GGOEWEBB082199", "GGOEWEBB082299", "GGOEYDHJ056049", "GGOEYDHJ056059", "GGOEAFKQ020599",
-                "GGOEAFKQ020499", "GGOEAFKQ020399", "GGOEAFKQ020299", "GGOEAFKQ020199", "GGOEYDHJ056029",
-                "GGOEYDHJ056039", "GGOEWEBB082399", "GGOEWEBB082499", "GGOEWEBB082599", "GGOEYDHJ056019"),
-  Product_name = c("ANRABESS Women's Summer 2 Piece Outfits", "Dokotoo Tops for Women Trendy Summer Casual",
-"rendy Queen Womens Oversized Sweatshirts Turtleneck", "Men's Crewneck Sweatshirts Soild Color",
-                   "yageyan Men Canvas Low top Shoes", "OLANLY Luxury Bathroom Rug Mat 24x16",
-                   "Clorox Toilet Plunger with Hideaway Storage Caddy", "64HYDRO 32oz 1Liter Motivational Water Bottle",
-                   "Ocean Bottle 17 oz", "Teal Office Supplies", "Amazon Basics Stapler with 1000 Staples",
-                   "Mr. Pen File Folders 18 Pack", "Gel Pens 12 Pcs Smooth Writing Pens No Bleed & Smear",
-                   "Mr. Pen- Sticky Notes 12 Pads", "64 oz Water Bottle", "Kids Water Bottle with Straw Lid 14oz",
-                   "KOHLER 4636-RL-0 Cachet ReadyLatch Elongated Toilet Seat", "Rubbermaid Commercial 15 Inch Toilet Brush",
-                   "Moen YB8099CH Mason Toilet Paper Roller", "bubba Flo Duo Refresh Insulated Water Bottle 24 oz (TEAL)"),
-  Product_Description = c("ANRABESS Women's Summer 2 Piece Outfits Sleeveless Tank Crop Button Back Top Capri Wide Leg Pants Linen Set with Pockets",
-                          "Dokotoo Tops for Women Trendy Summer Casual Cap Short Sleeve Basic Textured Solid Color Round Neck T Shirts Blouse",
-                          "rendy Queen Womens Oversized Sweatshirts Turtleneck Pullover Long Sleeve Hoodies Tops Fall Outfits 2023 Clothes",
-                          "Men's Crewneck Sweatshirts Soild Color Geometric Texture Long Sleeve Casual Pullover Shirt",
-                          "yageyan Men Canvas Low top Shoes Classic Casual Sneakers Black and White Fashion Shoes",
-                          "OLANLY Luxury Bathroom Rug Mat 24x16, Extra Soft and Absorbent Microfiber Bath Rugs, Non-Slip Plush Shaggy Bath Carpet, Machine Wash Dry, Bath Mats for Bathroom Floor, Tub and Shower, Grey",
-                          "Clorox Toilet Plunger with Hideaway Storage Caddy, 6.5'' x 6.5'' x 19.5'', White/Gray",
-                          "64HYDRO 32oz 1Liter Motivational Water Bottle with Time Marker, Ocean Turtle Beach Summer Vibe Lose My Mind Find My Soul - TTZ2001009Z",
-                          "Ocean Bottle - Recycled Stainless Steel Drinks Reusable Water Bottle - Eco-Friendly & Reusable - Sky Blue - 17 oz",
-                          "Teal Office Supplies, Teal Office Supplies and Accessories, Mint Green Stapler and Tape Dispenser Set for Women, Green Office Desk Accessories, Office Gift for Women, Office Lady, Coworkers",
-                          "Amazon Basics Stapler with 1000 Staples, Office Stapler, 25 Sheet",
-                          "Mr. Pen File Folders, 18 Pack, Morandi Colors, 1/3-Cut Tab, Letter Size, Durable Paper Folders, Office Supplies",
-                          "Gel Pens, 12 Pcs Smooth Writing Pens No Bleed & Smear, Black Ink Cute Pens Fine Point (0.5mm), Retractable Aesthetic Journaling Pens School Office Supplies for Women & Men",
-                          "Mr. Pen- Sticky Notes, 12 Pads, 3''x3'', Vintage Colors, Sticky Notes 3x3, Sticky Note, Sticky Pads, Sticky Notes Bulk, Stick Notes, Colored Sticky Notes, Sticky Note Pad, Colorful Sticky Notes",
-                          "64 oz Water Bottle, 1/2 Gallon Water Bottle, Water Bottle Holder with Shoulder Strap, Time Motivational Water Bottle - Great for Camping, Gym and Outdoor Activities, Gift",
-                          "Kids Water Bottle with Straw Lid 14oz, Vacuum Insulated 316 Stainless Steel Water Bottles for Kids for School, Leakproof Toddler Water Bottle, BPA Free and Keep Cold for 24 Hours",
-                          "KOHLER 4636-RL-0 Cachet ReadyLatch Elongated Toilet Seat, Quiet-Close Lid and Seat, Countoured Seat, Grip-Tight Bumpers and Installation Hardware, White",
-                          "Rubbermaid Commercial 15 Inch Toilet Brush, Toilet Bowl-Cleaner for Bathroom, Scrub Brush for Toilet",
-                          "Moen YB8099CH Mason Toilet Paper Roller, Chrome",
-                          "bubba Flo Duo Refresh Insulated Water Bottle, 24 oz, TEAL (TEAL)"),
-  Product_Category = c("Apparel", "Apparel", "Apparel", "Apparel", "Apparel",
-                       "Home Furniture", "Home Furniture", "Bottles", "Bottles", "Office",
-                       "Office", "Office", "Office", "Office", "Bottles",
-                       "Bottles", "Home Furniture", "Home Furniture", "Home Furniture", "Bottles"),
-  Stock = rep(100000, 20),
-  Price = c(554850, 299700, 584850, 374850, 374850, 148350, 239850, 299250, 825000, 254850,
-            128100, 179850, 97350, 134850, 370350, 149850, 594000, 55350, 23850, 299850)
-)
 
 ### UI-Dashboard Page
 
+```{r}
 # UI
 ui <- dashboardPage(
   dashboardHeader(
     title = div(
-      style = "text-align: center; 
-               background: linear-gradient(90deg, #FFD700, #FFFFFF); 
-               -webkit-background-clip: text; 
-               -webkit-text-fill-color: transparent; 
-               font-size: 50px; 
-               font-weight: bold; 
-               font-family: 'Arial Black', sans-serif; 
-               text-shadow: 2px 2px 4px rgba(0,0,0,0.3);",
-      h1("Dekirume", style = "margin: 0;")
-    )
+      style = "display: flex; align-items: center; justify-content: left; height: 100px; padding: 10px; margin-top: -20px;",  # Sesuaikan tinggi header dan tambahkan margin-top negatif
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/main/Images/Logo.jpg", 
+          width = "120px",  # Sesuaikan lebar gambar
+          height = "auto",  # Biarkan tinggi gambar menyesuaikan
+          style = "border-radius: 5px; object-fit: contain; max-height: 100%; margin-right: 15px;")  # Tambahkan margin untuk jarak
+    ),
+    titleWidth = 300  # Memperlebar area title agar sesuai dengan gambar
   ),
-  
   # Sidebar
   dashboardSidebar(
     sidebarMenu(
@@ -153,7 +106,7 @@ ui <- dashboardPage(
   dashboardBody(
     tags$head(
       tags$style(HTML("
-        /* Custom CSS for the dashboard */
+        /* Customizing dashboard appearance */
         .skin-blue .main-header .logo {
           background-color: #4682B4;
           color: white;
@@ -163,15 +116,15 @@ ui <- dashboardPage(
           background-color: #4682B4;
         }
         .skin-blue .main-sidebar {
-          background-color:  #4682B4;
+          background-color: #4682B4;
         }
         .skin-blue .main-sidebar .sidebar-menu > li > a {
           color: white;
         }
         .skin-blue .main-sidebar .sidebar-menu > li:hover > a {
-          background-color: #4682B4;
+          background-color: #5A9BD5;
         }
-        .box {
+        .box, .value-box {
           border-radius: 10px;
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
@@ -179,9 +132,26 @@ ui <- dashboardPage(
           font-size: 18px;
           font-weight: bold;
         }
-        .value-box {
-          border-radius: 10px;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        
+        /* Fixed header and sidebar */
+        .main-header {
+          position: fixed;
+          width: 100%;
+          top: 0;
+          z-index: 1030;
+        }
+        .main-sidebar {
+          position: fixed;
+          top: 50px;
+          bottom: 0;
+          left: 0;
+          width: 230px;
+          overflow-y: auto;
+        }
+        .content-wrapper {
+          margin-top: 50px;
+          margin-left: 230px;
+          padding: 20px;
         }
       "))
     ),
@@ -190,7 +160,6 @@ ui <- dashboardPage(
       # Tab Home
       tabItem(tabName = "home",
         div(style = "text-align: center;",
-            img(src = "www/logo7.png", height = 150, style = "margin-bottom: 10px;"),
             h2("Welcome to Dekirume!", style = "color: #2C3E50; font-size: 32px; font-weight: bold;"),
             p(strong("Your One-Stop Shop for Everything You Love!"), 
               style = "color: #2C3E50; font-size: 22px; margin-top: 10px; font-family: 'Verdana', sans-serif; font-weight: bold;")
@@ -221,14 +190,208 @@ ui <- dashboardPage(
 ),
       
       # Tab Product Category
-      tabItem(tabName = "product_category",
-        h2("Product Category", align = "center", style = "color: #2C3E50; font-size: 32px; font-weight: bold;"),
-            uiOutput("product_category_ui")  
-      ),
-      
-      # Tab Gallery Produk
-      tabItem(tabName = "gallery_product",
-        h2("Gallery Product", align = "center", style = "color: #2C3E50; font-size: 32px; font-weight: bold;"),
+tabItem(tabName = "product_category",
+  h2("Product Category", align = "center", style = "color: #2C3E50; font-size: 32px; font-weight: bold;"),
+  uiOutput("product_category_ui")  
+),
+
+# Tab Gallery Produk
+tabItem(tabName = "gallery_product",
+  h2("Gallery Product", align = "center", style = "color: #2C3E50; font-size: 32px; font-weight: bold;"),
+  fluidRow(
+    box(
+      title = "ANRABESS Women's Summer 2 Piece Outfits",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk1.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("ANRABESS Women's Summer 2 Piece Outfits Sleeveless Tank Crop Button Back Top Capri Wide Leg Pants Linen Set with Pockets.", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    ),
+    box(
+      title = "Dokotoo Tops for Women Trendy Summer Casual",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk2.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("Dokotoo Tops for Women Trendy Summer Casual Cap Short Sleeve Basic Textured Solid Color Round Neck T Shirts Blouse.", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    ),
+    box(
+      title = "Rendy Queen Womens Oversized Sweatshirts Turtleneck",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk3.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("Rendy Queen Womens Oversized Sweatshirts Turtleneck Pullover Long Sleeve Hoodies Tops Fall Outfits 2023 Clothes.", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    )
+  ),
+  fluidRow(
+    box(
+      title = "Men's Crewneck Sweatshirts Solid Color Geometric Texture Long Sleeve Casual Pullover Shirt",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk4.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("Men's Crewneck Sweatshirts Solid Color Geometric Texture Long Sleeve Casual Pullover Shirt", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    ),
+    box(
+      title = "Yageyan Men Canvas Low Top Shoes",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk5.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("Yageyan Men Canvas Low Top Shoes Classic Casual Sneakers Black and White Fashion Shoes", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    ),
+    box(
+      title = "OLANLY Luxury Bathroom Rug Mat 24x16",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk6.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("OLANLY Luxury Bathroom Rug Mat 24x16, Extra Soft and Absorbent Microfiber Bath Rugs, Non-Slip Plush Shaggy Bath Carpet, Machine Wash Dry, Bath Mats for Bathroom Floor, Tub and Shower, Grey.", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    )
+  ),
+  fluidRow(
+    box(
+      title = "Clorox Toilet Plunger with Hideaway Storage Caddy",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk7.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("Clorox Toilet Plunger with Hideaway Storage Caddy, 6.5'' x 6.5'' x 19.5'', White/Gray.", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    ),
+    box(
+      title = "64HYDRO 32oz 1Liter Motivational Water Bottle",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk13.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("64HYDRO 32oz 1Liter Motivational Water Bottle with Time Marker, Ocean Turtle Beach Summer Vibe Lose My Mind Find My Soul - TTZ2001009Z.", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    ),
+    box(
+      title = "Ocean Bottle 17 oz",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk12.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("Ocean Bottle - Recycled Stainless Steel Drinks Reusable Water Bottle - Eco-Friendly & Reusable - Sky Blue - 17 oz.", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    )
+  ),
+  fluidRow(
+    box(
+      title = "Teal Office Supplies",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk16.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("Teal Office Supplies, Teal Office Supplies and Accessories, Mint Green Stapler and Tape Dispenser Set for Women, Green Office Desk Accessories, Office Gift for Women, Office Lady, Coworkers.", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    ),
+    box(
+      title = "Amazon Basics Stapler with 1000 Staples",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk17.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("Amazon Basics Stapler with 1000 Staples, Office Stapler, 25 Sheet.", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    ),
+    box(
+      title = "Mr. Pen File Folders 18 Pack",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk18.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("Mr. Pen File Folders, 18 Pack, Morandi Colors, 1/3-Cut Tab, Letter Size, Durable Paper Folders, Office Supplies.", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    )
+  ),
+  fluidRow(
+    box(
+      title = "Gel Pens 12 Pcs Smooth Writing Pens No Bleed & Smear",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk19.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("Gel Pens, 12 Pcs Smooth Writing Pens No Bleed & Smear, Black Ink Cute Pens Fine Point (0.5mm), Retractable Aesthetic Journaling Pens School Office Supplies for Women & Men.", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    ),
+    box(
+      title = "Mr. Pen- Sticky Notes 12 Pads",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk20.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("Mr. Pen- Sticky Notes, 12 Pads, 3''x3'', Vintage Colors, Sticky Notes 3x3, Sticky Note, Sticky Pads, Sticky Notes Bulk, Stick Notes, Colored Sticky Notes, Sticky Note Pad, Colorful Sticky Notes.", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    ),
+    box(
+      title = "64 oz Water Bottle",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk11.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("64 oz Water Bottle, 1/2 Gallon Water Bottle, Water Bottle Holder with Shoulder Strap, Time Motivational Water Bottle - Great for Camping, Gym and Outdoor Activities, Gift.", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    )
+  ),
+  fluidRow(
+    box(
+      title = "Kids Water Bottle with Straw Lid 14oz",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk14.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("Kids Water Bottle with Straw Lid 14oz, Vacuum Insulated 316 Stainless Steel Water Bottles for Kids for School, Leakproof Toddler Water Bottle, BPA Free and Keep Cold for 24 Hours.", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    ),
+    box(
+      title = "KOHLER 4636-RL-0 Cachet ReadyLatch Elongated Toilet Seat",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk8.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("KOHLER 4636-RL-0 Cachet ReadyLatch Elongated Toilet Seat, Quiet-Close Lid and Seat, Countoured Seat, Grip-Tight Bumpers and Installation Hardware, White.", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    ),
+    box(
+      title = "Rubbermaid Commercial 15 Inch Toilet Brush",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk9.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("Rubbermaid Commercial 15 Inch Toilet Brush, Toilet Bowl-Cleaner for Bathroom, Scrub Brush for Toilet.", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    )
+  ),
+  fluidRow(
+    box(
+      title = "Moen YB8099CH Mason Toilet Paper Roller",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk10.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("Moen YB8099CH Mason Toilet Paper Roller, Chrome.", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+    ),
+    box(
+      title = "Bubba Flo Duo Refresh Insulated Water Bottle, 24 oz, TEAL (TEAL)",
+      width = 4,
+      status = "primary",
+      solidHeader = TRUE,
+      img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/DBDesigner/Produk/produk15.png", width = "100%", style = "border-radius: 10px; height: 300px; object-fit: cover;"),
+      p("Bubba Flo Duo Refresh Insulated Water Bottle, 24 oz, TEAL (TEAL).", 
+        style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
+          ),
+        ),
         uiOutput("gallery_product_ui")
       ),
       
@@ -256,9 +419,32 @@ ui <- dashboardPage(
       tabItem(tabName = "payment_methods",
         h2("Payment Methods", align = "center", style = "color: #2C3E50; font-size: 32px; font-weight: bold;"),
         fluidRow(
-          column(4, actionButton("pay_card", "💳 Credit/Debit Card", style = "width: 100%; background-color: #007bff; color: white;")),
-          column(4, actionButton("pay_wallet", "📱 Digital Wallets", style = "width: 100%; background-color: #28a745; color: white;")),
-          column(4, actionButton("pay_paypal", "🅿 PayPal", style = "width: 100%; background-color: #ffc107; color: black;"))
+          box(
+            title = "💳 Credit/Debit Card",
+            width = 4,
+            status = "primary",
+            solidHeader = TRUE,
+            img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/main/Images/bank.png", width = "100%", style = "border-radius: 10px;"),
+            actionButton("pay_card", "💳 Credit/Debit Card", 
+                         style = "width: 100%; background-color: #007bff; color: white; margin-top: 10px;")
+          ),
+          box(
+            title = "📱 Digital Wallets",
+            width = 4,
+            status = "primary",
+            solidHeader = TRUE,
+            img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/main/Images/digitalwallet.png", width = "100%", style = "border-radius: 10px;"),
+            actionButton("pay_wallet", "📱 Digital Wallets", 
+                         style = "width: 100%; background-color: #28a745; color: white; margin-top: 10px;")
+          ),
+          box(
+            title = "🅿 PayPal",
+            width = 4,
+            status = "primary",
+            solidHeader = TRUE,
+            img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/main/Images/paypal.png", width = "100%", style = "border-radius: 10px;"),
+            actionButton("pay_paypal", "🅿 PayPal", 
+                         style = "width: 100%; background-color: #ffc107; color: black; margin-top: 10px;"))
         )
       ),
       
@@ -274,7 +460,8 @@ ui <- dashboardPage(
             width = 6,
             status = "primary",
             solidHeader = TRUE,
-            img(src = "www/Image/dela.png", width = "100%", style = "border-radius: 10px;"),
+            img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/main/Images/dela.jpg
+", width = "100%", style = "border-radius: 10px;"),
             p("Develops intuitive user interfaces and efficient backend systems for seamless integration.", 
               style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
           ),
@@ -284,7 +471,8 @@ ui <- dashboardPage(
             width = 6,
             status = "primary",
             solidHeader = TRUE,
-            img(src = "www/Image/mega.png", width = "100%", style = "border-radius: 10px;"),
+            img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/main/Images/rupmana.jpg
+", width = "100%", style = "border-radius: 10px;"),
             p("Responsible for managing and optimizing our database systems.", 
               style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
           )
@@ -297,7 +485,8 @@ ui <- dashboardPage(
             width = 6,
             status = "primary",
             solidHeader = TRUE,
-            img(src = "www/Image/rizki.png", width = "100%", style = "border-radius: 10px;"),
+            img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/main/Images/rizqi.jpg
+", width = "10%", style = "border-radius: 10px;"),
             p("Creates engaging content to convey brand messages clearly and effectively.", 
               style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
           ),
@@ -307,7 +496,8 @@ ui <- dashboardPage(
             width = 6,
             status = "primary",
             solidHeader = TRUE,
-            img(src = "www/rupmana.png", width = "100%", style = "border-radius: 10px;"),
+            img(src = "https://raw.githubusercontent.com/delagustiara24/ProjectMDS/main/Images/mega.jpg
+", width = "100%", style = "border-radius: 10px;"),
             p("Designs and optimizes database structures for better performance.", 
               style = "font-size: 14px; color: #333; margin-top: 10px; text-align: justify;")
           )
