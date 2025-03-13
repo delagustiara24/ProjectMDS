@@ -95,7 +95,7 @@ Dengan menggunakan **R** dan **Shiny**, proyek ini menciptakan dashboard interak
 
 ## 🎥 Demo
 
-🔗 **Lihat demo proyek kami di:** [Dekirume Dashboard](https://yudheeet1991.shinyapps.io/mdskel4app/#)
+🔗 **Lihat demo proyek kami di:** [Dekirume Dashboard](https://)
 
 ---
 
