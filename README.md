@@ -115,6 +115,7 @@ Dengan menggunakan **R** dan **Shiny**, proyek ini menciptakan dashboard interak
 
 📊 **Entity-Relationship Diagram (ERD)**  
 Dokumentasi ini menyajikan Entity-Relationship Diagram (ERD) yang digunakan untuk memodelkan struktur data dalam sistem. ERD merupakan representasi visual dari entitas, atribut, serta hubungan antar entitas dalam basis data, yang bertujuan untuk memberikan pemahaman yang jelas mengenai desain dan alur data.
+
 ![ERD](Images/ERD.png)
 
 ---
@@ -267,7 +268,7 @@ CREATE TABLE IF NOT EXISTS data_transaction (
 
 ## ❤️ Tim Kami
 ### Frontend & Backend Developer: [M0501241024][Dela Gustiara](https://github.com/delagustiara24)
-![[Dela Gustiara](Images/dela.jpg)
+![Dela Gustiara](Images/dela.jpg)
 
 ### Database Manager: [M0501241071][Rupmana Br Butar Butar](https://github.com/Rupmana03)
 ![Rupmana Br Butar Butar](Images/rupmana.jpg)
