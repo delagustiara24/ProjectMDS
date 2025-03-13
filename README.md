@@ -25,11 +25,11 @@
 ## 📢 Tentang Dekirume
 
 ### Apa itu Dekirume?
-<div style="text-align: justify;">
+
 **Dekirume** adalah platform e-commerce inovatif yang menyediakan kemudahan dalam berbelanja secara online dengan fitur yang lengkap dan canggih. Menggunakan teknologi modern, Dekirume memungkinkan pengguna untuk melakukan transaksi dengan aman, cepat, dan efisien.
 
 Dekirume juga dirancang untuk membantu analisis tren penjualan melalui sistem database yang kuat, memungkinkan bisnis untuk memahami perilaku pelanggan dan meningkatkan strategi pemasaran.
-</div>
+
 ### ✨ Fitur Utama
 
 ✔️ **Pencarian Produk Cepat:** Temukan barang yang diinginkan dengan fitur pencarian yang responsif.  
@@ -59,11 +59,10 @@ Dekirume juga dirancang untuk membantu analisis tren penjualan melalui sistem da
 ---
 
 ## 📄 Tentang Proyek
-<div style="text-align: justify;">
 Proyek ini dikembangkan sebagai bagian dari tugas akhir mata kuliah *Manajemen Data Statistik*. Tujuan utama dari sistem ini adalah untuk menganalisis pola penjualan, perilaku pelanggan, dan efektivitas voucher dalam transaksi e-commerce.
 
 Dengan menggunakan **R** dan **Shiny**, proyek ini menciptakan dashboard interaktif untuk memudahkan visualisasi dan analisis data secara real-time.
-</div>
+
 ---
 
 ## 📸 Tangkapan Layar
@@ -115,20 +114,17 @@ Dengan menggunakan **R** dan **Shiny**, proyek ini menciptakan dashboard interak
 ## 🔗 ERD
 
 📊 **Entity-Relationship Diagram (ERD)**  
-<div style="text-align: justify;">
 Dokumentasi ini menyajikan Entity-Relationship Diagram (ERD) yang digunakan untuk memodelkan struktur data dalam sistem. ERD merupakan representasi visual dari entitas, atribut, serta hubungan antar entitas dalam basis data, yang bertujuan untuk memberikan pemahaman yang jelas mengenai desain dan alur data.
-</div>
 ![ERD](Images/ERD.png)
 
 ---
 
 ## 📊 Deskripsi Data
- <div style="text-align: justify;">
 Repositori ini berisi data dan dokumentasi terkait Dekirume. Data ini dikumpulkan dan diproses untuk mendukung analisis serta pengembangan lebih lanjut dalam konteks penggunaannya. Struktur tabel yang digunakan dalam database Dekirume.
 
 ### Create Table Customer
 Tabel customer berisi informasi penting mengenai data pelanggan, memungkinkan pengguna untuk mengakses berbagai detail terkait identitas pelanggan. Informasi yang tercakup dalam tabel ini meliputi Customer ID sebagai identitas unik setiap pelanggan, jenis kelamin, serta lokasi pelanggan yang mencakup empat wilayah utama, yaitu California, New York, Chicago, dan New Jersey. Selain itu, tabel ini juga mencatat rentang usia pelanggan, yang berada dalam kisaran 17 hingga 63 tahun.
-</div>
+
 | Attribute          | Type                  | Description                     |
 |:-------------------|:----------------------|:--------------------------------|
 | customerid         | integer               | Id Customer                     |
@@ -147,9 +143,8 @@ CREATE TABLE IF NOT EXISTS data_customer (
     );
 ```
 ### Create Table Voucher
-<div style="text-align: justify;">
 Tabel voucher menyajikan informasi mendetail mengenai voucher yang tersedia. Selain mengetahui jumlah produk yang memenuhi syarat untuk penggunaan voucher, pengguna juga dapat mengakses berbagai data penting terkait voucher yang dapat digunakan. Informasi yang disediakan mencakup nama voucher sebagai identitasnya serta nilai diskon yang diberikan melalui voucher tersebut.
-</div>
+
 | Attribute                  | Type                  | Description                     		       |
 |:---------------------------|:----------------------|:------------------------------------------|
 | voucherid                  | varchar               | Id Voucher                       	       |
@@ -166,9 +161,8 @@ CREATE TABLE IF NOT EXISTS data_voucher (
     );
 ```
 ### Create Table Payment Method
-<div style="text-align: justify;">
 Tabel payment method menyajikan informasi mengenai metode pembayaran yang tersedia bagi pengguna. Tabel ini mencakup empat jenis metode pembayaran utama, yaitu kartu, PayPal, dompet digital, serta metode lainnya. Setiap metode pembayaran diidentifikasi dengan PMID (Payment Method ID) sebagai kode unik, serta nama metode pembayaran yang sesuai dengan setiap ID.
-</div>
+
 | Attribute          | Type                  | Description                     |
 |:-------------------|:----------------------|:--------------------------------|
 | pmid               | varchar               | Id pay method                   |
@@ -183,9 +177,8 @@ CREATE TABLE IF NOT EXISTS data_payment_method (
     );
 ```
 ### Create Table Product
-<div style="text-align: justify;">
 Tabel produk berfungsi sebagai sumber informasi utama bagi pengguna untuk mengetahui detail berbagai produk yang tersedia di pasar Dekirume. Melalui tabel ini, pengguna dapat mengakses data penting, termasuk ID produk sebagai identitas unik, nama produk, deskripsi yang menjelaskan karakteristiknya, kategori produk untuk klasifikasi yang lebih terstruktur, jumlah stok yang mencerminkan ketersediaan barang, serta harga yang menjadi acuan dalam transaksi.
-</div>
+
 | Attribute                  | Type                  | Description                     		       |
 |:---------------------------|:----------------------|:------------------------------------------|
 | productid                  | varchar               | Id Produk                       		       |
@@ -208,9 +201,8 @@ CREATE TABLE IF NOT EXISTS data_product (
     );
 ```
 ### Create Table Transaction
-<div style="text-align: justify;">
 Tabel transaksi berfungsi sebagai wadah penyimpanan data yang mencatat seluruh aktivitas transaksi yang terjadi. Melalui tabel ini, pengguna dapat mengakses berbagai informasi penting terkait transaksi, termasuk ID transaksi sebagai identitas unik, tanggal transaksi untuk pencatatan waktu, serta total harga yang mencerminkan nilai keseluruhan dari setiap transaksi. Selain itu, tabel ini juga mencakup jumlah produk yang dibeli, ID pelanggan untuk mengidentifikasi pembeli, ID produk yang menunjukkan barang yang dibeli, ID metode pembayaran untuk mencatat cara pembayaran yang digunakan, serta ID voucher beserta status penggunaannya.
-</div>
+
 | Attribute                  | Type                  | Description                       		       |
 |:---------------------------|:----------------------|:--------------------------------------------|
 | transactionid              | integer               | Id Transaksi                       	       |
@@ -274,17 +266,17 @@ CREATE TABLE IF NOT EXISTS data_transaction (
 ---
 
 ## ❤️ Tim Kami
-### Frontend & Backend Developer: [Dela Gustiara][M0501241024](https://github.com/delagustiara24)
-![M0501241024](Images/dela.jpg)
+### Frontend & Backend Developer: [M0501241024][Dela Gustiara](https://github.com/delagustiara24)
+![[Dela Gustiara](Images/dela.jpg)
 
-### Database Manager: [Rupmana Br Butar Butar][M0501241071](https://github.com/Rupmana03)
-![M0501241071](Images/rupmana.png)
+### Database Manager: [M0501241071][Rupmana Br Butar Butar](https://github.com/Rupmana03)
+![Rupmana Br Butar Butar](Images/rupmana.jpg)
 
-### Copy Writer: [Rizqi Annafi Muhadi][M0501241061](https://github.com/rizqiannafii)
-![M0501241061](Images/rizki.png)
+### Copy Writer: [M0501241061][Rizqi Annafi Muhadi](https://github.com/rizqiannafii)
+![Rizqi Annafi Muhadi](Images/rizqi.jpg)
 
-### Database Designer: [Mega Maulina][M0501241047](https://github.com/megaamln)
-![M0501241047](Images/mega.png)
+### Database Designer: [M0501241047][Mega Maulina](https://github.com/megaamln)
+![Mega Maulina](Images/mega.jpg)
 
 ---
 
