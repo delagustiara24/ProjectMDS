@@ -270,13 +270,13 @@ CREATE TABLE IF NOT EXISTS data_transaction (
 ![[Dela Gustiara](Images/dela.jpg)
 
 ### Database Manager: [M0501241071][Rupmana Br Butar Butar](https://github.com/Rupmana03)
-![Rupmana Br Butar Butar](Images/rupmana.png)
+![Rupmana Br Butar Butar](Images/rupmana.jpg)
 
 ### Copy Writer: [M0501241061][Rizqi Annafi Muhadi](https://github.com/rizqiannafii)
-![Rizqi Annafi Muhadi](Images/rizki.png)
+![Rizqi Annafi Muhadi](Images/rizqi.jpg)
 
 ### Database Designer: [M0501241047][Mega Maulina](https://github.com/megaamln)
-![Mega Maulina](Images/mega.png)
+![Mega Maulina](Images/mega.jpg)
 
 ---
 
