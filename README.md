@@ -13,7 +13,6 @@
 - [Cara Menggunakan](#cara-menggunakan)
 - [Tentang Proyek](#tentang-proyek)
 - [Tangkapan Layar](#tangkapan-layar)
-- [Demo](#demo)
 - [Struktur Database](#struktur-database)
 - [ERD](#erd)
 - [Deskripsi Data](#deskripsi-data)
@@ -51,10 +50,9 @@ Dekirume juga dirancang untuk membantu analisis tren penjualan melalui sistem da
 
 1. **Jelajahi Produk:** Gunakan menu navigasi atau fitur pencarian untuk menemukan barang yang Anda inginkan.
 2. **Detail Produk:** Lihat deskripsi, harga, stok, dan diskon sebelum melakukan pembelian.
-3. **Tambahkan ke Keranjang:** Klik tombol **"Tambahkan ke Keranjang"** untuk menyimpan produk pilihan.
-4. **Gunakan Voucher:** Pilih voucher yang tersedia untuk mendapatkan potongan harga eksklusif.
-5. **Proses Pembayaran:** Pilih metode pembayaran yang sesuai, lalu selesaikan transaksi dengan aman.
-6. **Pesanan Selesai!** Anda akan menerima konfirmasi dan dapat melacak pesanan melalui akun Dekirume. 🎉
+3. **Gunakan Voucher:** Pilih voucher yang tersedia untuk mendapatkan potongan harga eksklusif.
+4. **Proses Pembayaran:** Pilih metode pembayaran yang sesuai, lalu selesaikan transaksi dengan aman.
+5. **Pesanan Selesai!** Pesanaan Anda akan segera diproses oleh Dekirume. 🎉
 
 ---
 
@@ -91,12 +89,6 @@ Dengan menggunakan **R** dan **Shiny**, proyek ini menciptakan dashboard interak
 <p align="center">
   <img width="900" height="500" src="Images/Payment.jpg">
 </p>
----
-
-## 🎥 Demo
-
-🔗 **Lihat demo proyek kami di:** [Dekirume Dashboard](https://)
-
 ---
 
 ## 📌 Struktur Database
@@ -247,14 +239,16 @@ CREATE TABLE IF NOT EXISTS data_transaction (
 
 ```
 .
-├── Data                   # Data proyek
+├── Data                                   # Data proyek
 │   └── csv
 ├── Images
-├── app                    # Aplikasi Shiny
-│   ├── css
-│   ├── server.R
-│   └── ui.R
-├── doc                    # Dokumentasi proyek
+├── app                                    # Aplikasi Shiny
+│   ├── ProjectMDS_FrontBackEnd.qmd
+│   ├── ProjectMDS_FrontBackEnd_DELA.qmd
+│   ├── Server.qmd
+│   └── UI.qmd
+├── conn
+│   └── DBManager.qmd
 ├── .gitignore
 ├── DBManager.qmd
 ├── PraktikumMDS.Rproj
