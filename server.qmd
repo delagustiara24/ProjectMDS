@@ -1,11 +1,76 @@
 ---
-title: "server"
-author: "Dela Gustiara"
+title: "Server"
+author: "Kelompok 4"
 format: html
 editor: visual
 ---
 
-### Back End
+```{r}
+library(DBI)
+library(RMySQL)
+library(glue)
+
+# Konfigurasi database
+db_config <- list(
+  host = "127.0.0.1",
+  port = 3307,          # Sesuaikan dengan port MySQL kamu
+  user = "root",
+  password = "",
+  dbname = "database_os"    # Nama database yang ingin dipakai
+)
+
+# Koneksi awal ke server MySQL (tanpa database)
+con <- dbConnect(
+  MySQL(),
+  host = db_config$host,
+  port = db_config$port,
+  user = db_config$user,
+  password = db_config$password
+)
+
+# Cek apakah database sudah ada
+db_list <- dbGetQuery(con, "SHOW DATABASES")
+db_exists <- db_config$dbname %in% db_list$Database
+
+if (db_exists) {
+  message("Database '", db_config$dbname, "' sudah ada.")
+} else {
+  dbExecute(con, glue("CREATE DATABASE `{db_config$dbname}`"))
+  message("Database '", db_config$dbname, "' berhasil dibuat.")
+}
+
+# Tutup koneksi awal
+dbDisconnect(con)
+
+# Koneksi ulang langsung ke database yang ditentukan
+con <- dbConnect(
+  MySQL(),
+  host = db_config$host,
+  port = db_config$port,
+  user = db_config$user,
+  password = db_config$password,
+  dbname = db_config$dbname
+)
+
+message("Terhubung ke database '", db_config$dbname, "'.")
+
+# Nanti setelah selesai kerja
+# dbDisconnect(con)
+
+```
+
+```{r}
+library(shiny)
+library(shinydashboard)
+library(DT)
+library(plotly)
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(lubridate)
+```
+
+### Server-Dashboard Page
 
 ```{r}
 server <- function(input, output, session) {
@@ -178,7 +243,7 @@ output$best_selling_plot <- renderPlotly({
     plot_ly(best_selling_data, y = ~reorder(Product_name, Total_Sales), x = ~Total_Sales, 
             type = 'bar', marker = list(color = 'orange'), orientation = 'h') %>%
       layout(title = "Top 5 Best Selling Products",
-             xaxis = list(title = "Total Sales ($)"),
+             xaxis = list(title = "Total Sales (Rp)"),
              yaxis = list(title = "Product"))
 })
 # Best Selling Products by Age (Horizontal, Descending)
@@ -192,7 +257,7 @@ output$age_plot <- renderPlotly({
     plot_ly(age_data, y = ~reorder(Age, Total_Sales), x = ~Total_Sales, 
             type = 'bar', marker = list(color = 'blue'), orientation = 'h') %>%
       layout(title = "Top 5 Best Selling Products by Age",
-             xaxis = list(title = "Total Sales ($)"),
+             xaxis = list(title = "Total Sales (Rp)"),
              yaxis = list(title = "Age"))
 })
 
@@ -285,53 +350,6 @@ lapply(unique(product_data$Product_Category), function(category) {
 })
 
 
-    
-# Galeri Produk seperti Tabel dengan Gambar
-output$gallery_product_ui <- renderUI({
-  product_data <- products()  
-  categories <- unique(product_data$Product_Category)  
-  
-  # Buat tabel untuk menampilkan produk per kategori
-  tagList(
-    fluidRow(
-      lapply(categories, function(category) {
-        column(
-          width = 3,  
-          h4(category, style = "text-align: center; color: #1E90FF; font-size: 20px; font-weight: bold; margin-bottom: 20px;")
-        )
-      })
-    ),
-    
-    # Baris Produk
-    fluidRow(
-      lapply(categories, function(category) {
-        category_products <- product_data %>% filter(Product_Category == category)
-        column(
-          width = 3,  
-          lapply(1:nrow(category_products), function(i) {
-            box(
-              title = category_products$Product_name[i],
-              width = 12,  
-              status = "primary",
-              solidHeader = TRUE,
-              fluidRow(
-                column(
-                  width = 12,  
-                  img(src = category_products$Image_Path[i], width = "100%", style = "border-radius: 10px; margin-bottom: 10px;")
-                ),
-                column(
-                  width = 12,  
-                  p(category_products$Product_Description[i], style = "font-size: 14px; color: #333; text-align: justify;")
-                )
-              )
-            )
-          })
-        )
-      })
-    )
-  )
-})
-
 # Update Pilihan Voucher di selectizeInput
 observe({
   voucher_names <- unique(vouchers()$Voucher_name)
@@ -410,3 +428,10 @@ output$voucher_usage_category_plot <- renderPlotly({
   })
 }
 ```
+
+###Memanggil dashboard
+```{r}
+shinyApp(ui, server)
+```
+
+
