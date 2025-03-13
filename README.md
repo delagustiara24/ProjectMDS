@@ -247,20 +247,17 @@ CREATE TABLE IF NOT EXISTS data_transaction (
 
 ```
 .
-├── Dataset_4_New          # Data proyek
+├── Data                   # Data proyek
 │   └── csv
 ├── Images
 ├── app                    # Aplikasi Shiny
 │   ├── css
 │   ├── server.R
 │   └── ui.R
-├── data                   # Data proyek
-│   ├── csv
-│   └── sql
-│       └── db.sql
 ├── doc                    # Dokumentasi proyek
-├── src                    # Kode sumber proyek
 ├── .gitignore
+├── DBManager.qmd
+├── PraktikumMDS.Rproj
 └── README.md
 ```
 
