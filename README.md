@@ -250,7 +250,6 @@ CREATE TABLE IF NOT EXISTS data_transaction (
 ├── conn
 │   └── DBManager.qmd
 ├── .gitignore
-├── DBManager.qmd
 ├── PraktikumMDS.Rproj
 └── README.md
 ```
